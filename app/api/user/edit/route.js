@@ -1,0 +1,15 @@
+import prisma from "../../../../lib/db";
+import { NextResponse } from "next/server";
+
+export async function POST(req) {
+	const { user } = await req.json()
+
+	const editedUser = await prisma.user.update({
+		where: {
+			id: user.id
+		},
+		data: user
+	})
+
+	return NextResponse.json(editedUser)
+}
