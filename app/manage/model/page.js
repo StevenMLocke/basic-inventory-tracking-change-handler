@@ -1,9 +1,11 @@
 import ModelClientWrapper from './components/modelClientWrapper'
-import { getModels } from './lib/model'
+import { getData } from '@/lib/helpers'
 
 export default async function Page() {
-	const models = await getModels()
+	const models = await getData('http://localhost:3000/api/model/get/models')
+	const manufacturers = await getData('http://localhost:3000/api/manufacturer/get/manufacturers', { next: { revalidate: 60 } })
+
 	return (
-		<ModelClientWrapper models={models}></ModelClientWrapper>
+		<ModelClientWrapper models={models} manufacturers={manufacturers}></ModelClientWrapper>
 	)
 }

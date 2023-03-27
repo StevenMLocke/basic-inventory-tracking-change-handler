@@ -33,3 +33,41 @@ export function MgmtFormTextInput({
 		></input>
 	);
 }
+
+export function MgmtDropdown({
+	data,
+	changeHandler,
+	id,
+	placeholderText,
+	selectorId,
+}) {
+	return (
+		<select
+			required
+			id={id}
+			className='select select-bordered select-sm w-full max-w-xs form-control'
+			onChange={changeHandler}
+			placeholder={placeholderText}
+			value={selectorId}
+		>
+			<option
+				value=''
+				disabled
+				selected
+			>
+				Pick one
+			</option>
+			{data.map((item) => {
+				return (
+					<option
+						key={item.id}
+						id={item.id}
+						value={item.id}
+					>
+						{item.name}
+					</option>
+				);
+			})}
+		</select>
+	);
+}
