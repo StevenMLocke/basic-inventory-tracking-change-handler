@@ -2,11 +2,11 @@
 export function MgmtForm({ children, buttonClickHandler, buttonText }) {
 	return (
 		<form
-			className='flex flex-col items-center mx-auto mt-2 gap-2'
+			className='flex flex-col items-center mx-auto my-2 gap-2'
 			onSubmit={buttonClickHandler}
 		>
 			{children}
-			<button className='btn btn-primary bg-neutral-focus btn-outline'>
+			<button className='btn btn-primary btn-sm bg-neutral-focus btn-outline'>
 				{buttonText}
 			</button>
 		</form>
@@ -19,6 +19,7 @@ export function MgmtFormTextInput({
 	value,
 	changeHandler,
 	disabledValue,
+	focusHandler,
 }) {
 	return (
 		<input
@@ -27,7 +28,8 @@ export function MgmtFormTextInput({
 			id={id}
 			placeholder={placeholderText}
 			type='text'
-			value={value}
+			value={value || ""}
+			onFocus={focusHandler}
 			onChange={changeHandler}
 			disabled={disabledValue}
 		></input>
@@ -39,7 +41,8 @@ export function MgmtDropdown({
 	changeHandler,
 	id,
 	placeholderText,
-	selectorId,
+	value,
+	disabledValue,
 }) {
 	return (
 		<select
@@ -47,15 +50,14 @@ export function MgmtDropdown({
 			id={id}
 			className='select select-bordered select-sm w-full max-w-xs form-control'
 			onChange={changeHandler}
-			placeholder={placeholderText}
-			value={selectorId}
+			value={value}
+			disabled={disabledValue}
 		>
 			<option
 				value=''
 				disabled
-				selected
 			>
-				Pick one
+				{placeholderText}
 			</option>
 			{data.map((item) => {
 				return (
