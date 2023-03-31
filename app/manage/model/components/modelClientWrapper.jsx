@@ -12,6 +12,7 @@ import { postData } from "@/lib/helpers";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 
 export default function ModelClientWrapper({ models, manufacturers }) {
 	const router = useRouter();
@@ -61,13 +62,13 @@ export default function ModelClientWrapper({ models, manufacturers }) {
 
 	const tableRowSelectHandler = (e, item, selectedTab) => {
 		if (selectedTab > 1) {
-			const manufacturer = manus.filter((m) => {
+			const [manufacturer] = manus.filter((m) => {
 				return m.name == item.manufacturer;
 			});
 
 			let itemCopy = { ...item };
 
-			itemCopy.manufacturer_id = manufacturer[0].id;
+			itemCopy.manufacturer_id = manufacturer.id;
 			delete itemCopy.manufacturer;
 
 			setFormFields(itemCopy);
@@ -82,7 +83,10 @@ export default function ModelClientWrapper({ models, manufacturers }) {
 
 		await postData("http://localhost:3000/api/model/create", data).then(
 			(json) => {
-				setInfo(`${json.name} created!`);
+				const [manufacturer] = manus.filter(
+					(m) => m.id === json.manufacturer_id
+				);
+				setInfo(`${manufacturer.name} - ${json.name} created!`);
 				setFormFields({});
 				setActiveRowId(json.id);
 			}
@@ -98,7 +102,10 @@ export default function ModelClientWrapper({ models, manufacturers }) {
 		const data = { model: { ...formFields } };
 		await postData("http://localhost:3000/api/model/edit", data).then(
 			(json) => {
-				setInfo(`${json.name} edited!`);
+				const [manufacturer] = manus.filter(
+					(m) => m.id === json.manufacturer_id
+				);
+				setInfo(`${manufacturer.name} - ${json.name} edited!`);
 				setFormFields({});
 				setActiveRowId(json.id);
 			}
@@ -115,7 +122,10 @@ export default function ModelClientWrapper({ models, manufacturers }) {
 		const data = { model: { ...formFields } };
 		await postData("http://localhost:3000/api/model/remove", data).then(
 			(json) => {
-				setInfo(`${json.name} removed!`);
+				const [manufacturer] = manus.filter(
+					(m) => m.id === json.manufacturer_id
+				);
+				setInfo(`${manufacturer.name} - ${json.name} removed!`);
 				setFormFields({});
 				setActiveRowId(null);
 			}
@@ -139,12 +149,10 @@ export default function ModelClientWrapper({ models, manufacturers }) {
 			)}
 			<div className='flex flex-1 pt-4'>
 				<div className='flex flex-col items-center flex-initial basis-1/4'>
-					{tableData.length > 0 && (
-						<MgmtTabs
-							selectedTabNum={selected}
-							clickHandler={tabClickHandler}
-						></MgmtTabs>
-					)}
+					<MgmtTabs
+						selectedTabNum={selected}
+						clickHandler={tabClickHandler}
+					></MgmtTabs>
 					<div className='tabs-content flex flex-col items-center w-full'>
 						{selected == 1 && (
 							<MgmtForm
@@ -215,12 +223,14 @@ export default function ModelClientWrapper({ models, manufacturers }) {
 				</div>
 				<div className='divider divider-horizontal h-[90%] my-auto'></div>
 				{tableData.length > 0 && (
-					<MgmtTable
-						activeRowId={activeRowId}
-						selectHandler={tableRowSelectHandler}
-						selectedTab={selected}
-						itemsArr={tableData}
-					></MgmtTable>
+					<Suspense fallback={<div>Wait a sec!</div>}>
+						<MgmtTable
+							activeRowId={activeRowId}
+							selectHandler={tableRowSelectHandler}
+							selectedTab={selected}
+							itemsArr={tableData}
+						></MgmtTable>
+					</Suspense>
 				)}
 			</div>
 			<pre>{JSON.stringify(formFields, null, 2)}</pre>

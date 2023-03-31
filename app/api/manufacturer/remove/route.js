@@ -10,5 +10,5 @@ export async function POST(req) {
 		}
 	})
 
-	return NextResponse.json({ removedManufacturer })
+	return NextResponse.json(removedManufacturer)
 }

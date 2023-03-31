@@ -1,9 +1,22 @@
 import { getData } from "@/lib/helpers"
-import AssetClientWrapper from './components/assetClientWrapper'
+import ClientWrapper from "@/components/clientWrapper"
 
 export default async function Page() {
-	const assets = await getData('http://localhost:3000/api/asset/get')
+	const apiUrl = process.env.API
+	const assets = await getData(`${apiUrl}asset/get/assets`)
+	const tableData = assets.map((asset) => {
+		return ({
+			asset_number: asset.asset_number,
+			id: asset.id,
+			model: asset.model.name,
+			manufacturer: asset.model.manufacturer.name
+		})
+	})
+
+
 	return (
-		<AssetClientWrapper assets={assets}></AssetClientWrapper>
+		<>
+			<pre>{JSON.stringify(assets, null, 2)}</pre>
+		</>
 	)
 }

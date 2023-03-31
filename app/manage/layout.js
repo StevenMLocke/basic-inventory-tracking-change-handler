@@ -1,7 +1,7 @@
 import SideBar from './../../components/SideBar.jsx'
 import { Main } from './../../components/Main.jsx'
 import Link from 'next/link.js'
-
+import { Suspense } from 'react'
 export default function ModifyLayout({ children }) {
 	return (
 		<div className="page-wrapper flex h-[100cqh] md:w-5/6 mx-auto">
@@ -42,7 +42,11 @@ export default function ModifyLayout({ children }) {
 
 				</ul>
 			</SideBar>
-			<Main>{children}</Main>
+			<Main>
+				<Suspense fallback={<div>One Moment...</div>}>
+					{children}
+				</Suspense>
+			</Main>
 		</div>
 	)
 }

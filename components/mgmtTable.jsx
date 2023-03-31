@@ -30,11 +30,18 @@ export default function MgmtTable({
 								}`}
 								onClick={(e) => selectHandler(e, item, selectedTab)}
 							>
-								<td>{i + 1}</td>
+								<td className='table-cell bg-neutral-focus'>{i + 1}</td>
 								{itemKeys
 									.filter((key) => key != "id" && key != "permission_id")
 									.map((key, i) => {
-										return <td key={`${i} ${item.id}`}>{item[key]}</td>;
+										return (
+											<td
+												key={`${i} ${item.id}`}
+												className='table-cell bg-neutral-focus'
+											>
+												{item[key]}
+											</td>
+										);
 									})}
 							</tr>
 						);

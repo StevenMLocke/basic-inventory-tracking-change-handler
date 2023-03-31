@@ -13,6 +13,8 @@ export default function UsersTable({
 						<th>First Name</th>
 						<th>Last Name</th>
 						<th>Email</th>
+						<th>edit</th>
+						<th>remove</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -34,6 +36,9 @@ export default function UsersTable({
 								<td className='table-cell bg-neutral-focus'>{user.fn}</td>
 								<td className='table-cell bg-neutral-focus'>{user.ln}</td>
 								<td className='table-cell bg-neutral-focus'>{user.email}</td>
+								<td className='table-cell bg-neutral-focus'>
+									<button className='btn btn-circle btn-outline'>edit</button>
+								</td>
 							</tr>
 						);
 					})}
