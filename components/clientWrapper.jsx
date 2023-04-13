@@ -10,12 +10,14 @@ import {
 	MgmtFormTextInput,
 	MgmtDropdown,
 } from "@/components/mgmtForm";
+import { Table } from "@/components/reactTable.jsx";
 import { postData } from "@/lib/helpers";
 
 import { ErrorAlert, InfoAlert } from "@/components/alerts";
 
 export default function ClientWrapper({
 	tableData,
+	tableColumns,
 	itemName,
 	apiUrl,
 	inputTextArr, //map to inputs on mgmtform
@@ -224,12 +226,10 @@ export default function ClientWrapper({
 				</div>
 				<div className='divider divider-horizontal h-[90%] my-auto'></div>
 				{tableData && tableData.length !== 0 && (
-					<MgmtTable
-						itemsArr={tableData}
-						activeRowId={activeRowId}
-						selectHandler={tableRowSelectHandler}
-						selectedTab={selected}
-					></MgmtTable>
+					<Table
+						tableData={tableData}
+						tableColumns={tableColumns}
+					></Table>
 				)}
 			</div>
 			<pre>{JSON.stringify(formFields, null, 2)}</pre>

@@ -137,6 +137,9 @@ export default function UsersClientWrapper({ users }) {
 					</>
 				)}
 			</div>
+			<pre>
+				<code>{JSON.stringify(formFields, null, 2)}</code>
+			</pre>
 		</div>
 	);
 }

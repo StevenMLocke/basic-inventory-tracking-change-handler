@@ -18,6 +18,14 @@ export async function GET() {
 				}
 			},
 			asset_number: true,
+			location: {
+				select: {
+					id: true,
+					name: true
+				}
+			},
+			status: true,
+			user: true,
 		}
 	})
 

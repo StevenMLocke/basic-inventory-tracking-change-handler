@@ -20,7 +20,25 @@ export async function POST(req) {
 						}
 					}
 				}
-			}
+			},
+			status: {
+				select: {
+					status: true
+				}
+			},
+			user: {
+				select: {
+					fn: true,
+					ln: true,
+					full_name: true,
+					email: true,
+				}
+			},
+			location: {
+				select: {
+					name: true
+				}
+			},
 		}
 	})
 
