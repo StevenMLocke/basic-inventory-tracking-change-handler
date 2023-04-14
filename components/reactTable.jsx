@@ -1,15 +1,24 @@
 /* eslint-disable react/jsx-key */
 "use client";
 import { useMemo } from "react";
-import { useTable } from "react-table";
+import { useTable, useSortBy } from "react-table";
 
-export function Table({ tableData, tableColumns }) {
+export function Table({
+	tableData,
+	tableColumns,
+	selectHandler,
+	selectedTab,
+	activeRowId,
+}) {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const data = useMemo(() => tableData, []);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const columns = useMemo(() => tableColumns, []);
 
-	const tableInstance = useTable({ columns, data });
+	const tableInstance = useTable(
+		{ columns, data, initialState: { hiddenColumns: ["id"] } },
+		useSortBy
+	);
 	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
 		tableInstance;
 
@@ -23,7 +32,20 @@ export function Table({ tableData, tableColumns }) {
 					{headerGroups.map((headerGroup) => (
 						<tr {...headerGroup.getHeaderGroupProps()}>
 							{headerGroup.headers.map((col) => (
-								<th {...col.getHeaderProps()}>{col.render("Header")}</th>
+								<th
+									{...col.getHeaderProps(col.getSortByToggleProps())}
+									className={`${col.isSorted ? "underline" : ""}`}
+								>
+									{col.render("Header")}
+									<span
+										className={`inline-block min-w-[2rem] origin-center text-center transition-all duration-700
+											${col.isSorted ? "visible" : "invisible"}
+											${col.isSortedDesc ? "rotate-180" : "rotate-0"}
+										`}
+									>
+										{col.isSorted ? "🔼" : ""}
+									</span>
+								</th>
 							))}
 						</tr>
 					))}
@@ -34,7 +56,12 @@ export function Table({ tableData, tableColumns }) {
 						return (
 							<tr
 								{...row.getRowProps()}
-								className={`table-row hover hover:cursor-pointer`}
+								className={`table-row hover hover:cursor-pointer ${
+									row.index === activeRowId ? "border-2 border-white" : null
+								}`}
+								onClick={(e) =>
+									selectHandler(e, row.values, selectedTab, row.index)
+								}
 							>
 								{row.cells.map((cell) => {
 									return (

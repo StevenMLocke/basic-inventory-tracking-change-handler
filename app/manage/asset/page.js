@@ -1,5 +1,4 @@
 import { getData } from "@/lib/helpers"
-import { Table } from '@/components/reactTable'
 import ClientWrapper from "@/components/clientWrapper"
 
 export default async function Page() {
@@ -15,7 +14,14 @@ export default async function Page() {
 		})
 	})
 
+	const rowNum = (row) => row.index
+
 	const tableColumns = [
+		{
+			Header: '',
+			accessor: 'id',
+			id: 'id'
+		},
 		{
 			Header: 'Asset #',
 			accessor: 'asset_number'

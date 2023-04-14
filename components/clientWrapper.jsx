@@ -60,10 +60,10 @@ export default function ClientWrapper({
 		setActiveRowId(null);
 	};
 
-	const tableRowSelectHandler = (e, item, selectedTab) => {
+	const tableRowSelectHandler = (e, item, selectedTab, rowIndex) => {
 		if (selectedTab > 1) {
 			setFormFields(item);
-			setActiveRowId(item.id);
+			setActiveRowId(rowIndex);
 		}
 	};
 
@@ -229,10 +229,14 @@ export default function ClientWrapper({
 					<Table
 						tableData={tableData}
 						tableColumns={tableColumns}
+						selectHandler={tableRowSelectHandler}
+						selectedTab={selected}
+						activeRowId={activeRowId}
 					></Table>
 				)}
 			</div>
 			<pre>{JSON.stringify(formFields, null, 2)}</pre>
+			<pre>{JSON.stringify(activeRowId, null, 2)}</pre>
 			{children}
 		</div>
 	);
