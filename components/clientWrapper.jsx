@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import SectionHero from "@/components/sectionHero";
 import MgmtTabs from "@/components/mgmtTabs";
-import MgmtTable from "@/components/mgmtTable";
 import {
 	MgmtForm,
 	MgmtFormTextInput,
@@ -18,8 +17,9 @@ import { ErrorAlert, InfoAlert } from "@/components/alerts";
 export default function ClientWrapper({
 	tableData,
 	tableColumns,
+	tableOptions,
 	itemName,
-	apiUrl,
+	apiUrl, //for the handlers
 	inputTextArr, //map to inputs on mgmtform
 	inputSelectArr, //map to inputs on mgmtform
 	children, //for testing
@@ -69,7 +69,6 @@ export default function ClientWrapper({
 
 	const createHandler = async (e) => {
 		e.preventDefault();
-		alert(`${apiUrl}create`);
 		const data = {};
 		data[itemName] = { ...formFields, id: uuidv4() };
 
@@ -124,31 +123,32 @@ export default function ClientWrapper({
 		});
 	};
 
-	function FormInputs({ textArray, selectArray, disabledValue }) {
+	function formInputs(textFieldsArray, selectArray, disabledValue) {
 		return (
 			<>
-				{textArray?.map((item) => {
+				{textFieldsArray?.map((item) => {
 					return (
 						<MgmtFormTextInput
-							key={item.id}
-							changeHandler={fieldChangeHandler}
-							disabledValue={disabledValue}
-							focusHandler={fieldFocusHandler}
+							key={item.name}
 							id={item.name}
-							placeholderText={item.name}
-							value={formFields[item.name] || null}
+							placeholderText={`Choose ${item.name}...`}
+							changeHandler={fieldChangeHandler}
+							focusHandler={fieldFocusHandler}
+							value={formFields[item.name] ?? ""}
+							disabledValue={disabledValue}
+							inputType={item.inputType}
 						></MgmtFormTextInput>
 					);
 				})}
 				{selectArray?.map((item) => {
 					return (
 						<MgmtDropdown
-							changeHandler={fieldChangeHandler}
+							id={item.id}
+							placeholderText={`Select a(n) ${item.type}...`}
 							data={item.data}
 							disabledValue={disabledValue}
-							id={item.id}
-							placeholderText={item.type}
-							value={formFields[item.id] || null}
+							value={formFields[item.id] || ""}
+							changeHandler={fieldChangeHandler}
 							key={item.id}
 						></MgmtDropdown>
 					);
@@ -185,13 +185,8 @@ export default function ClientWrapper({
 								buttonClickHandler={createHandler}
 								buttonText={"Create"}
 							>
-								{(inputSelectArr || inputTextArr) && (
-									<FormInputs
-										textArray={inputTextArr}
-										selectArray={inputSelectArr}
-										disabledValue={false}
-									></FormInputs>
-								)}
+								{(inputSelectArr || inputTextArr) &&
+									formInputs(inputTextArr, inputSelectArr, false)}
 							</MgmtForm>
 						)}
 						{selected == 2 && (
@@ -199,13 +194,8 @@ export default function ClientWrapper({
 								buttonClickHandler={editHandler}
 								buttonText={"Edit"}
 							>
-								{(inputSelectArr || inputTextArr) && (
-									<FormInputs
-										textArray={inputTextArr}
-										selectArray={inputSelectArr}
-										disabledValue={false}
-									></FormInputs>
-								)}
+								{(inputSelectArr || inputTextArr) &&
+									formInputs(inputTextArr, inputSelectArr, false)}
 							</MgmtForm>
 						)}
 						{selected == 3 && (
@@ -213,13 +203,8 @@ export default function ClientWrapper({
 								buttonClickHandler={removeHandler}
 								buttonText={"remove"}
 							>
-								{(inputSelectArr || inputTextArr) && (
-									<FormInputs
-										textArray={inputTextArr}
-										selectArray={inputSelectArr}
-										disabledValue={true}
-									></FormInputs>
-								)}
+								{(inputSelectArr || inputTextArr) &&
+									formInputs(inputTextArr, inputSelectArr, true)}
 							</MgmtForm>
 						)}
 					</div>
@@ -232,11 +217,11 @@ export default function ClientWrapper({
 						selectHandler={tableRowSelectHandler}
 						selectedTab={selected}
 						activeRowId={activeRowId}
+						options={tableOptions}
 					></Table>
 				)}
 			</div>
 			<pre>{JSON.stringify(formFields, null, 2)}</pre>
-			<pre>{JSON.stringify(activeRowId, null, 2)}</pre>
 			{children}
 		</div>
 	);

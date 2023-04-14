@@ -9,16 +9,14 @@ export function Table({
 	selectHandler,
 	selectedTab,
 	activeRowId,
+	options,
 }) {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const data = useMemo(() => tableData, []);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	const columns = useMemo(() => tableColumns, []);
 
-	const tableInstance = useTable(
-		{ columns, data, initialState: { hiddenColumns: ["id"] } },
-		useSortBy
-	);
+	const tableInstance = useTable({ columns, data, ...options }, useSortBy);
 	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
 		tableInstance;
 

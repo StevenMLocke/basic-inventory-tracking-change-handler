@@ -12,6 +12,11 @@ export async function GET() {
 					name: true
 				}
 			}
+		},
+		orderBy: {
+			manufacturer: {
+				name: 'asc'
+			}
 		}
 	})
 

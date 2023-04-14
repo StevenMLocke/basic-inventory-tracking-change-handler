@@ -20,14 +20,16 @@ export function MgmtFormTextInput({
 	changeHandler,
 	disabledValue,
 	focusHandler,
+	inputType,
+	required,
 }) {
 	return (
 		<input
-			required
+			required={required ?? true}
 			className='input input-bordered input-sm w-full max-w-xs form-control'
 			id={id}
 			placeholder={placeholderText}
-			type='text'
+			type={inputType ?? "text"}
 			value={value || ""}
 			onFocus={focusHandler}
 			onChange={changeHandler}
@@ -43,13 +45,15 @@ export function MgmtDropdown({
 	placeholderText,
 	value,
 	disabledValue,
+	required,
 }) {
 	return (
 		<select
-			required
+			required={required ?? true}
 			id={id}
 			className='select select-bordered select-sm w-full max-w-xs form-control'
 			onChange={changeHandler}
+			defaultValue={""}
 			value={value}
 			disabled={disabledValue}
 		>

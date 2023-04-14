@@ -26,6 +26,9 @@ export async function GET() {
 			},
 			status: true,
 			user: true,
+		},
+		orderBy: {
+			asset_number: 'asc'
 		}
 	})
 
