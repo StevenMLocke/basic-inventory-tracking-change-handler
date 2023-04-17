@@ -1,5 +1,5 @@
 import { getData } from "@/lib/helpers"
-import ClientWrapper from "@/components/clientWrapper"
+import ClientWrapper from "@/components/mgmtClientWrapper"
 
 export default async function Page() {
 	const apiUrl = process.env.API
@@ -12,6 +12,7 @@ export default async function Page() {
 		return ({
 			asset_number: asset.asset_number,
 			id: asset.id,
+			serial_number: asset.serial_number,
 			model: asset.model.name,
 			model_id: asset.model.id,
 			manufacturer: asset.model.manufacturer.name
@@ -40,6 +41,10 @@ export default async function Page() {
 		{
 			Header: 'Manufacturer',
 			accessor: 'manufacturer'
+		},
+		{
+			Header: 'Serial #',
+			accessor: 'serial_number'
 		}
 	]
 
@@ -54,9 +59,14 @@ export default async function Page() {
 
 	const textFields = [
 		{
-			id: 'assetNumber',
-			name: 'asset_number',
-			inputType: 'number'
+			id: 'asset_number',
+			name: 'asset number',
+			inputType: 'number',
+		},
+		{
+			id: 'serial_number',
+			name: 'serial number',
+			inputType: 'text',
 		},
 	]
 
@@ -82,7 +92,7 @@ export default async function Page() {
 				itemName={`Asset`}
 				inputTextArr={textFields}
 				inputSelectArr={selectFields}
-				apiUrl={apiUrl}
+				apiUrl={`${apiUrl}asset/`}
 			>
 			</ClientWrapper>
 		</>

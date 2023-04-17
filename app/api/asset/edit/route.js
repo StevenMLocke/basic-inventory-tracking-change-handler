@@ -4,7 +4,10 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
 	const p = new PrismaClient()
-	const asset = await req.json()
+	const { asset } = await req.json()
+
+	delete asset.model
+	delete asset.manufacturer
 
 	const editedAsset = await p.asset.update({
 		where: {

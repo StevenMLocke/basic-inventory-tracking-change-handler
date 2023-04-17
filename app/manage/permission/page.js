@@ -1,4 +1,4 @@
-import ClientWrapper from '@/components/clientWrapper'
+import ClientWrapper from '@/components/mgmtClientWrapper'
 import { getData } from '@/lib/helpers'
 import { Suspense } from 'react'
 

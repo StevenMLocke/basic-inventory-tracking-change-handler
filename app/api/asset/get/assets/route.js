@@ -24,6 +24,7 @@ export async function GET() {
 					name: true
 				}
 			},
+			serial_number: true,
 			status: true,
 			user: true,
 		},

@@ -1,5 +1,5 @@
-import SideBar from './../../components/SideBar.jsx'
-import { Main } from './../../components/Main.jsx'
+import SideBar from './../../components/sideBar.jsx'
+import { Main } from '../../components/main.jsx'
 import Link from 'next/link.js'
 import { Suspense } from 'react'
 export default function ModifyLayout({ children }) {

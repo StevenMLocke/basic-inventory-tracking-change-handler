@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-key */
-"use client";
 import { useMemo } from "react";
 import { useTable, useSortBy } from "react-table";
 
@@ -11,15 +9,13 @@ export function Table({
 	activeRowId,
 	options,
 }) {
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	const data = useMemo(() => tableData, []);
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	const columns = useMemo(() => tableColumns, []);
+	const data = useMemo(() => tableData, [tableData]);
+	const columns = useMemo(() => tableColumns, [tableColumns]);
 
-	const tableInstance = useTable({ columns, data, ...options }, useSortBy);
 	const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-		tableInstance;
+		useTable({ columns, data, ...options }, useSortBy);
 
+	//reference https://github.com/TanStack/table/discussions/2647 for key solve
 	return (
 		<div className='flex flex-1 items-start'>
 			<table
@@ -27,33 +23,48 @@ export function Table({
 				className='flex-1 table table-compact border-t-4 border-slate-400 bg-neutral-focus'
 			>
 				<thead>
-					{headerGroups.map((headerGroup) => (
-						<tr {...headerGroup.getHeaderGroupProps()}>
-							{headerGroup.headers.map((col) => (
-								<th
-									{...col.getHeaderProps(col.getSortByToggleProps())}
-									className={`${col.isSorted ? "underline" : ""}`}
-								>
-									{col.render("Header")}
-									<span
-										className={`inline-block min-w-[2rem] origin-center text-center transition-all duration-700
+					{headerGroups.map((headerGroup) => {
+						const { key, ...restHeaderGroupProps } =
+							headerGroup.getHeaderGroupProps();
+						return (
+							<tr
+								key={key}
+								{...restHeaderGroupProps}
+							>
+								{headerGroup.headers.map((col) => {
+									const { key, ...restCol } = col.getHeaderProps(
+										col.getSortByToggleProps()
+									);
+									return (
+										<th
+											key={key}
+											{...restCol}
+											className={`${col.isSorted ? "underline" : ""}`}
+										>
+											{col.render("Header")}
+											<span
+												className={`inline-block min-w-[2rem] origin-center text-center transition-all duration-700
 											${col.isSorted ? "visible" : "invisible"}
 											${col.isSortedDesc ? "rotate-180" : "rotate-0"}
 										`}
-									>
-										{col.isSorted ? "🔼" : ""}
-									</span>
-								</th>
-							))}
-						</tr>
-					))}
+											>
+												{col.isSorted ? "🔼" : ""}
+											</span>
+										</th>
+									);
+								})}
+							</tr>
+						);
+					})}
 				</thead>
 				<tbody {...getTableBodyProps()}>
 					{rows.map((row) => {
 						prepareRow(row);
+						const { key, ...restRowProps } = row.getRowProps();
 						return (
 							<tr
-								{...row.getRowProps()}
+								key={key}
+								{...restRowProps}
 								className={`table-row hover hover:cursor-pointer ${
 									row.index === activeRowId ? "border-2 border-white" : null
 								}`}
@@ -62,8 +73,14 @@ export function Table({
 								}
 							>
 								{row.cells.map((cell) => {
+									const { key, ...restCellProps } = cell.getCellProps();
 									return (
-										<td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+										<td
+											key={key}
+											{...restCellProps}
+										>
+											{cell.render("Cell")}
+										</td>
 									);
 								})}
 							</tr>

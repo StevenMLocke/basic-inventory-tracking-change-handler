@@ -1,5 +1,5 @@
-import SideBar from './../../components/SideBar'
-import { Main } from './../../components/Main'
+import SideBar from './../../components/sideBar'
+import { Main } from './../../components/main'
 import Link from 'next/link'
 
 export default function HomeLayout({ children }) {

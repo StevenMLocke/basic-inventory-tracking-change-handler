@@ -19,12 +19,12 @@ model asset {
   model_id            String        @db.VarChar(38)
   serial_number       String        @unique(map: "serial_number_UNIQUE") @db.VarChar(64)
   assigned_to_user_id String?       @db.VarChar(38)
-  status_id           String        @default("d5b0ac69-557a-4750-8f1a-5488c32a9ce9") @db.VarChar(38)
+  status_id           String?       @db.VarChar(38)
   location_id         String?       @db.VarChar(38)
   user                user?         @relation(fields: [assigned_to_user_id], references: [id], onDelete: NoAction, map: "fk_user_id")
   location            location?     @relation(fields: [location_id], references: [id], onDelete: NoAction, map: "fk_location_id_asset")
   model               model         @relation(fields: [model_id], references: [id], onDelete: NoAction, map: "fk_model_id")
-  status              status        @relation(fields: [status_id], references: [id], onDelete: NoAction, map: "fk_status_id_asset")
+  status              status?       @relation(fields: [status_id], references: [id], onDelete: NoAction, map: "fk_status_id_asset")
   transaction         transaction[]
 
   @@index([model_id], map: "fk_model_id")
@@ -36,8 +36,8 @@ model asset {
 model manufacturer {
   id        String  @id @unique(map: "manfacturer_id_UNIQUE") @db.VarChar(38)
   name      String  @unique(map: "name_UNIQUE") @db.VarChar(64)
-  status_id String  @db.VarChar(38)
-  status    status  @relation(fields: [status_id], references: [id], onDelete: NoAction, map: "fk_status_id_manu")
+  status_id String? @db.VarChar(38)
+  status    status? @relation(fields: [status_id], references: [id], onDelete: NoAction, map: "fk_status_id_manu")
   model     model[]
 
   @@index([status_id], map: "fk_status_id_manu")
@@ -47,10 +47,10 @@ model model {
   id              String       @id @unique(map: "model_id_UNIQUE") @db.VarChar(38)
   name            String       @db.VarChar(64)
   manufacturer_id String       @db.VarChar(38)
-  status_id       String       @db.VarChar(38)
+  status_id       String?      @db.VarChar(38)
   asset           asset[]
   manufacturer    manufacturer @relation(fields: [manufacturer_id], references: [id], onDelete: NoAction, map: "fk_manfacturer_id")
-  status          status       @relation(fields: [status_id], references: [id], onDelete: NoAction, map: "fk_status_id_model")
+  status          status?      @relation(fields: [status_id], references: [id], onDelete: NoAction, map: "fk_status_id_model")
 
   @@unique([name, manufacturer_id], map: "uni_mname_and_manu")
   @@index([manufacturer_id], map: "fk_manfacturer_id_idx")
@@ -69,11 +69,11 @@ model transaction {
   asset_id                              String   @db.VarChar(38)
   action_id                             String   @db.VarChar(38)
   action_user_id                        String   @db.VarChar(38)
-  asset_user_id                         String   @db.VarChar(38)
+  asset_user_id                         String?  @db.VarChar(38)
   action                                action   @relation(fields: [action_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_action_id")
   user_transaction_action_user_idTouser user     @relation("transaction_action_user_idTouser", fields: [action_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_action_user_id")
   asset                                 asset    @relation(fields: [asset_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_asset_id")
-  user_transaction_asset_user_idTouser  user     @relation("transaction_asset_user_idTouser", fields: [asset_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_asset_user_id")
+  user_transaction_asset_user_idTouser  user?    @relation("transaction_asset_user_idTouser", fields: [asset_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_asset_user_id")
 
   @@index([action_id], map: "fk_action_id_idx")
   @@index([action_user_id], map: "fk_action_user_id_idx")
@@ -88,12 +88,12 @@ model user {
   full_name                                    String        @db.VarChar(255)
   email                                        String        @unique(map: "email_UNIQUE") @db.VarChar(45)
   permission_id                                String?       @unique(map: "permission_id_UNIQUE") @db.VarChar(38)
-  status_id                                    String        @db.VarChar(38)
+  status_id                                    String?       @db.VarChar(38)
   asset                                        asset[]
   transaction_transaction_action_user_idTouser transaction[] @relation("transaction_action_user_idTouser")
   transaction_transaction_asset_user_idTouser  transaction[] @relation("transaction_asset_user_idTouser")
   permission                                   permission?   @relation(fields: [permission_id], references: [id], onDelete: NoAction, map: "fk_permission_id")
-  status                                       status        @relation(fields: [status_id], references: [id], onDelete: NoAction, map: "fk_status_id_user")
+  status                                       status?       @relation(fields: [status_id], references: [id], onDelete: NoAction, map: "fk_status_id_user")
 
   @@index([status_id], map: "fk_status_id_user")
 }
@@ -111,9 +111,9 @@ model status {
 model location {
   id        String  @id @unique(map: "id_UNIQUE") @db.VarChar(38)
   name      String  @unique(map: "name_UNIQUE") @db.VarChar(255)
-  status_id String  @db.VarChar(38)
+  status_id String? @db.VarChar(38)
   asset     asset[]
-  status    status  @relation(fields: [status_id], references: [id], onDelete: NoAction, map: "fk_status_id_location")
+  status    status? @relation(fields: [status_id], references: [id], onDelete: NoAction, map: "fk_status_id_location")
 
   @@index([status_id], map: "fk_status_id_location")
 }

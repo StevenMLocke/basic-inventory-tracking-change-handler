@@ -53,7 +53,6 @@ export function MgmtDropdown({
 			id={id}
 			className='select select-bordered select-sm w-full max-w-xs form-control'
 			onChange={changeHandler}
-			defaultValue={""}
 			value={value}
 			disabled={disabledValue}
 		>
