@@ -1,5 +1,5 @@
 import { getData } from "@/lib/helpers";
-import ClientWrapper from "@/components/mgmtClientWrapper";
+import ClientWrapper from "./../components/mgmtClientWrapper";
 
 export default async function Page() {
 	const apiUrl = process.env.API;
@@ -46,25 +46,24 @@ export default async function Page() {
 	};
 
 	const textFields = [
-		/* 		{
-			id: '', //db column
-			name: '',  
-			inputType: '',
-		}, */
+		{
+			id: 'name', //db column
+			name: 'model name',
+			inputType: 'text',
+		},
 	];
 
 	const selectFields = [
-		/* 		{
-			id: '',
-			type: '',
-			data: [items].map(item => {
+		{
+			id: 'manufacturer_id', //db col
+			type: 'manufacturer',
+			data: manufacturers.map(item => {
 				return {
 					id: item.id,
-					name: `<item>`
+					name: `${item.name}`
 				}
 			})
 		},
-	 */
 	];
 
 	return (
@@ -77,7 +76,8 @@ export default async function Page() {
 				inputTextArr={textFields}
 				inputSelectArr={selectFields}
 				apiUrl={`${apiUrl}${itemName.toLowerCase()}/`}
-			></ClientWrapper>
+			>
+			</ClientWrapper>
 		</>
 	);
 }

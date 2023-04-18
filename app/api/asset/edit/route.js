@@ -1,15 +1,14 @@
-import { PrismaClient } from "@prisma/client";
 import prisma from '@/lib/db'
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
-	const p = new PrismaClient()
 	const { asset } = await req.json()
 
 	delete asset.model
 	delete asset.manufacturer
+	delete asset.location_name
 
-	const editedAsset = await p.asset.update({
+	const editedAsset = await prisma.asset.update({
 		where: {
 			id: asset.id,
 		},

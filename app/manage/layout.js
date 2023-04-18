@@ -1,5 +1,5 @@
-import SideBar from './../../components/sideBar.jsx'
-import { Main } from '../../components/main.jsx'
+import SideBar from '@/components/sideBar.jsx'
+import { Main } from '@/components/main.jsx'
 import Link from 'next/link.js'
 import { Suspense } from 'react'
 export default function ModifyLayout({ children }) {
@@ -8,7 +8,7 @@ export default function ModifyLayout({ children }) {
 			<SideBar>
 				<ul className='menu menu-compact'>
 					<li>
-						<Link href={'/'}>Home</Link>
+						<Link href={'/'}>Asset TransActions</Link>
 					</li>
 					<li>
 						<Link href={'/manage/'}>Manage</Link>
@@ -17,19 +17,10 @@ export default function ModifyLayout({ children }) {
 						<div className='divider divider-horizontal'></div>
 						<ul className='menu menu-compact'>
 							<li>
-								<Link href={'/manage/user'}>Users</Link>
-							</li>
-							<li>
 								<Link href={'/manage/asset'}>Assets</Link>
 							</li>
 							<li>
-								<Link href={'/manage/action'}>Actions</Link>
-							</li>
-							<li>
-								<Link href={'/manage/permission'} >Permissions</Link>
-							</li>
-							<li>
-								<Link href={'/manage/transaction'}>Transactions</Link>
+								<Link href={'/manage/user'}>Users</Link>
 							</li>
 							<li>
 								<Link href={'/manage/manufacturer'}>Manufacturers</Link>
@@ -37,9 +28,14 @@ export default function ModifyLayout({ children }) {
 							<li>
 								<Link href={'/manage/model'}>Models</Link>
 							</li>
+							<li>
+								<Link href={'/manage/location'}>Locations</Link>
+							</li>
+							<li>
+								<Link href={'/manage/action'}>Actions</Link>
+							</li>
 						</ul>
 					</div>
-
 				</ul>
 			</SideBar>
 			<Main>

@@ -1,13 +1,16 @@
 import { getData } from "@/lib/helpers";
-import ClientWrapper from "./../components/mgmtClientWrapper";
+import ClientWrapper from "./../manage/components/mgmtClientWrapper";
 
 export default async function Page() {
 	const apiUrl = process.env.API;
-	const itemName = "Action";
-	const actionsData = getData(`${apiUrl}${itemName.toLowerCase()}/get/${itemName.toLowerCase()}s`);
-	const [actions] = await Promise.all([actionsData]);
+	const itemName = "";
+	const itemNamesData = getData(
+		`${apiUrl}${itemName.toLowerCase()}/get/${itemName.toLowerCase()}s`
+	);
 
-	const tableData = actions;
+	const [] = await Promise.all([]);
+
+	const tableData = [];
 
 	const tableColumns = [
 		{
@@ -15,10 +18,6 @@ export default async function Page() {
 			accessor: "id",
 			id: "id",
 		},
-		{
-			Header: "Action Type",
-			accessor: "type"
-		}
 	];
 
 	const tableOptions = {
@@ -28,11 +27,25 @@ export default async function Page() {
 	};
 
 	const textFields = [
-		{
-			id: 'type', //db column
-			name: 'Action',
-			inputType: 'text',
-		}
+		/* 		{
+			id: '', //db column
+			name: '',  
+			inputType: '',
+		}, */
+	];
+
+	const selectFields = [
+		/* 		{
+			id: '',
+			type: '',
+			data: [items].map(item => {
+				return {
+					id: item.id,
+					name: `<item>`
+				}
+			})
+		},
+	 */
 	];
 
 	return (
@@ -43,6 +56,7 @@ export default async function Page() {
 				tableOptions={tableOptions}
 				itemName={`${itemName}`}
 				inputTextArr={textFields}
+				inputSelectArr={selectFields}
 				apiUrl={`${apiUrl}${itemName.toLowerCase()}/`}
 			></ClientWrapper>
 		</>

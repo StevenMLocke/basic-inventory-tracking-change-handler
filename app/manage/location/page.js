@@ -1,22 +1,26 @@
 import { getData } from "@/lib/helpers";
-import ClientWrapper from "@/components/mgmtClientWrapper";
+import ClientWrapper from "./../components/mgmtClientWrapper";
 
 export default async function Page() {
 	const apiUrl = process.env.API;
-	const itemName = "";
-	const itemNamesData = getData(
+	const itemName = "Location";
+	const locationsData = getData(
 		`${apiUrl}${itemName.toLowerCase()}/get/${itemName.toLowerCase()}s`
 	);
 
-	const [] = await Promise.all([]);
+	const [locations] = await Promise.all([locationsData]);
 
-	const tableData = [];
+	const tableData = locations;
 
 	const tableColumns = [
 		{
 			Header: "",
 			accessor: "id",
 			id: "id",
+		},
+		{
+			Header: "Location",
+			accessor: "name",
 		},
 	];
 
@@ -27,11 +31,11 @@ export default async function Page() {
 	};
 
 	const textFields = [
-		/* 		{
-			id: '', //db column
-			name: '',  
-			inputType: '',
-		}, */
+		{
+			id: 'name', //db column
+			name: 'location',
+			inputType: 'text',
+		},
 	];
 
 	const selectFields = [

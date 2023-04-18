@@ -1,12 +1,13 @@
 import { getData } from "@/lib/helpers"
-import ClientWrapper from "@/components/mgmtClientWrapper"
+import ClientWrapper from './../components/mgmtClientWrapper'
 
 export default async function Page() {
 	const apiUrl = process.env.API
 	const assetsData = getData(`${apiUrl}asset/get/assets`)
 	const modelsData = getData(`${apiUrl}model/get/models`)
+	const locationsData = getData(`${apiUrl}location/get/locations`)
 
-	const [assets, models] = await Promise.all([assetsData, modelsData])
+	const [assets, models, locations] = await Promise.all([assetsData, modelsData, locationsData])
 
 	const tableData = assets.map((asset) => {
 		return ({
@@ -15,7 +16,9 @@ export default async function Page() {
 			serial_number: asset.serial_number,
 			model: asset.model.name,
 			model_id: asset.model.id,
-			manufacturer: asset.model.manufacturer.name
+			manufacturer: asset.model.manufacturer.name,
+			location_id: asset.location?.id,
+			location_name: asset.location?.name,
 		})
 	})
 
@@ -45,7 +48,16 @@ export default async function Page() {
 		{
 			Header: 'Serial #',
 			accessor: 'serial_number'
-		}
+		},
+		{
+			Header: '',
+			accessor: 'location_id',
+			id: 'location_id',
+		},
+		{
+			Header: 'Location',
+			accessor: 'location_name'
+		},
 	]
 
 	const tableOptions = {
@@ -53,6 +65,7 @@ export default async function Page() {
 			hiddenColumns: [
 				"id",
 				"model_id",
+				"location_id",
 			]
 		}
 	}
@@ -67,6 +80,7 @@ export default async function Page() {
 			id: 'serial_number',
 			name: 'serial number',
 			inputType: 'text',
+			required: true
 		},
 	]
 
@@ -80,6 +94,12 @@ export default async function Page() {
 					name: `${model.manufacturer.name} - ${model.name}`
 				}
 			})
+		},
+		{
+			id: 'location_id',
+			type: 'location',
+			data: locations,
+			required: false
 		},
 	]
 

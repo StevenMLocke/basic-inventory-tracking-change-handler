@@ -3,16 +3,12 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import SectionHero from "@/components/sectionHero";
-import MgmtTabs from "@/components/mgmtTabs";
-import {
-	MgmtForm,
-	MgmtFormTextInput,
-	MgmtDropdown,
-} from "@/components/mgmtForm";
-import { Table } from "@/components/reactTable.jsx";
+import MgmtTabs from "./mgmtTabs";
+import { MgmtForm, MgmtFormTextInput, MgmtDropdown } from "./mgmtForm";
+import { Table } from "./mgmtTable";
 import { postData } from "@/lib/helpers";
 
-import { ErrorAlert, InfoAlert } from "@/components/alerts";
+import { ErrorAlert, InfoAlert } from "./mgmtAlerts";
 
 export default function ClientWrapper({
 	tableData,
@@ -139,6 +135,7 @@ export default function ClientWrapper({
 							value={formFields[item.id] ?? ""}
 							disabledValue={disabledValue}
 							inputType={item.inputType}
+							required={item.required ?? true}
 						></MgmtFormTextInput>
 					);
 				})}
@@ -152,6 +149,7 @@ export default function ClientWrapper({
 							value={formFields[item.id] ?? ""}
 							changeHandler={fieldChangeHandler}
 							key={item.id}
+							required={item.required ?? true}
 						></MgmtDropdown>
 					);
 				})}
