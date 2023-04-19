@@ -28,13 +28,16 @@ export function Table({
 
 	//reference https://github.com/TanStack/table/discussions/2647 for key solve
 	return (
-		<div className='flex flex-1 items-start overflow-y-auto max-h-[100cqh]'>
-			<Flipper flipKey={state}>
+		<div className='flex flex-1 items-start overflow-y-auto max-h-[100cqh] scroll-smooth'>
+			<Flipper
+				flipKey={state}
+				className='w-full'
+			>
 				<table
 					{...getTableProps()}
-					className='flex-1 table table-auto table-compact border-separate'
+					className='w-full table table-auto table-compact border-separate'
 				>
-					<thead className='table-header-group border-t-4 border-slate-400'>
+					<thead className='table-header-group sticky top-0'>
 						{headerGroups.map((headerGroup) => {
 							const { key, ...restHeaderGroupProps } =
 								headerGroup.getHeaderGroupProps();
@@ -42,7 +45,7 @@ export function Table({
 								<tr
 									key={key}
 									{...restHeaderGroupProps}
-									className={`sticky top-0`}
+									className={``}
 								>
 									{headerGroup.headers.map((col) => {
 										const { key, ...restCol } = col.getHeaderProps(

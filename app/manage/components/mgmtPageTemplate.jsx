@@ -1,5 +1,5 @@
 import { getData } from "@/lib/helpers";
-import ClientWrapper from "./../manage/components/mgmtClientWrapper";
+import ClientWrapper from "./mgmtClientWrapper";
 
 export default async function Page() {
 	const apiUrl = process.env.API;
