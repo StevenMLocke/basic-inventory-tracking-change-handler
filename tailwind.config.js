@@ -6,7 +6,11 @@ module.exports = {
 		"./components/**/*.{js,ts,jsx,tsx}",
 	],
 	theme: {
-		extend: {},
+		extend: {
+			transitionProperty: {
+				'max-height': 'max-height',
+			},
+		},
 	},
 	plugins: [
 		require('@tailwindcss/container-queries'),

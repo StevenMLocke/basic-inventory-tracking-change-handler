@@ -32,6 +32,5 @@ export async function GET() {
 			asset_number: 'asc'
 		}
 	})
-
 	return NextResponse.json(assets)
 }

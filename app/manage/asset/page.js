@@ -9,7 +9,8 @@ export default async function Page() {
 
 	const [assets, models, locations] = await Promise.all([assetsData, modelsData, locationsData])
 
-	const tableData = assets.map((asset) => {
+
+	const tableData = assets?.map((asset) => {
 		return ({
 			asset_number: asset.asset_number,
 			id: asset.id,
@@ -88,7 +89,7 @@ export default async function Page() {
 		{
 			id: 'model_id',
 			type: 'model',
-			data: models.map(model => {
+			data: models?.map(model => {
 				return {
 					id: model.id,
 					name: `${model.manufacturer.name} - ${model.name}`

@@ -1,8 +1,7 @@
-import Accordion from '@/components/accordion'
-import Link from 'next/link'
+import SectionHero from '@/components/sectionHero'
 
 export default function Home() {
 	return (
-		<>Hola, Mundo!</>
+		<><SectionHero title={`Basic Inventory Tracking Change Handler`}></SectionHero></>
 	)
 }

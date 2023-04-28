@@ -6,7 +6,6 @@ import SectionHero from "@/components/sectionHero";
 import MgmtTabs from "./mgmtTabs";
 import { MgmtForm, MgmtFormTextInput, MgmtDropdown } from "./mgmtForm";
 import { Table } from "./mgmtTable";
-import { postData } from "@/lib/helpers";
 
 import { ErrorAlert, InfoAlert } from "./mgmtAlerts";
 
@@ -28,6 +27,16 @@ export default function ClientWrapper({
 	const [activeRowId, setActiveRowId] = useState(null);
 	const [error, setError] = useState(false);
 	const [info, setInfo] = useState(null);
+
+	const postData = async function (url, data) {
+		const res = await fetch(url, {
+			method: "POST",
+			body: JSON.stringify(data),
+			next: { revalidate: 0 },
+		});
+
+		return res.json();
+	};
 
 	const errorAlertDismissHandler = (e) => {
 		setError(false);

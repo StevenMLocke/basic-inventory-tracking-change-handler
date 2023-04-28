@@ -1,11 +1,14 @@
 import Link from "next/link";
 import Accordion from "./accordion";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-export default function SideBar({ children }) {
+export default async function SideBar() {
+	const session = await getServerSession(authOptions);
 	return (
 		<aside className='md:w-1/6 border-r-2 border-slate-400 flex flex-col gap-2 p-4 bg-base-300'>
 			<Accordion title={"Asset Transactions"}>
-				<ul className='menu menu-compact'>
+				<ul className='menu menu-compact flex-1 flex-nowrap'>
 					<li>
 						<Link href={"#"}>Check In</Link>
 					</li>
@@ -18,7 +21,7 @@ export default function SideBar({ children }) {
 				</ul>
 			</Accordion>
 			<Accordion title={"Manage"}>
-				<ul className='menu menu-compact'>
+				<ul className='menu menu-compact flex-1 flex-nowrap'>
 					<li>
 						<Link href={"/manage/asset"}>Assets</Link>
 					</li>
@@ -39,7 +42,21 @@ export default function SideBar({ children }) {
 					</li>
 				</ul>
 			</Accordion>
-			{children}
+			{session === null ? (
+				<Link
+					href={"api/auth/signin"}
+					className='btn-outline btn-info btn'
+				>
+					Sign In
+				</Link>
+			) : (
+				<Link
+					href={"/api/auth/signout"}
+					className='btn-outline btn-info btn'
+				>
+					Sign Out
+				</Link>
+			)}
 		</aside>
 	);
 }
