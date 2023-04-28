@@ -108,3 +108,8 @@ model location {
   asset       asset[]
   transaction transaction[]
 }
+
+model role {
+  id   String @id @unique(map: "id_UNIQUE") @db.VarChar(38)
+  name String @unique(map: "name_UNIQUE") @db.VarChar(45)
+}

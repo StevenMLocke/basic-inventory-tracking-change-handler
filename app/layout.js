@@ -2,7 +2,6 @@ import { Main } from '@/components/main'
 import SideBar from '@/components/sideBar'
 import { Suspense } from 'react'
 import './globals.css'
-import { authOptions } from './api/auth/[...nextauth]/route'
 
 export const metadata = {
 	title: 'Basic Inventory Tracking Change Handler',
