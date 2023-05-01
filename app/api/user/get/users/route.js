@@ -14,7 +14,7 @@ export async function GET() {
 					status: true,
 				}
 			},
-			permission: true,
+			role: true
 		}
 	})
 	return NextResponse.json(users)

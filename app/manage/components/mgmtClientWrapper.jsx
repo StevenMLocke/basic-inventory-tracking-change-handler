@@ -10,6 +10,7 @@ import { Table } from "./mgmtTable";
 import { ErrorAlert, InfoAlert } from "./mgmtAlerts";
 
 export default function ClientWrapper({
+	session,
 	tableData,
 	tableColumns,
 	tableOptions,
@@ -185,6 +186,7 @@ export default function ClientWrapper({
 			<div className='flex flex-1 pt-4'>
 				<div className='flex flex-col items-center flex-initial basis-1/4'>
 					<MgmtTabs
+						role={session.token.role}
 						clickHandler={tabClickHandler}
 						selectedTabNum={selected}
 					></MgmtTabs>
@@ -231,6 +233,7 @@ export default function ClientWrapper({
 				)}
 			</div>
 			<pre>{JSON.stringify(formFields, null, 2)}</pre>
+			<pre>{JSON.stringify(session, null, 2)}</pre>
 			{children}
 		</div>
 	);

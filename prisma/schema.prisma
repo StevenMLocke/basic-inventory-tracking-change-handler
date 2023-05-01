@@ -53,7 +53,6 @@ model model {
 model permission {
   id   String @id @db.VarChar(38)
   type String @db.VarChar(64)
-  user user?
 }
 
 model transaction {
@@ -83,16 +82,17 @@ model user {
   ln                                           String        @db.VarChar(45)
   full_name                                    String        @db.VarChar(255)
   email                                        String        @unique(map: "email_UNIQUE") @db.VarChar(45)
-  permission_id                                String?       @unique(map: "permission_id_UNIQUE") @db.VarChar(38)
   status_id                                    String?       @db.VarChar(38)
   authorized_bitch_user                        Int           @default(0) @db.TinyInt
+  role_id                                      String?       @db.VarChar(45)
   asset                                        asset[]
   transaction_transaction_action_user_idTouser transaction[] @relation("transaction_action_user_idTouser")
   transaction_transaction_asset_user_idTouser  transaction[] @relation("transaction_asset_user_idTouser")
-  permission                                   permission?   @relation(fields: [permission_id], references: [id], onDelete: NoAction, map: "fk_permission_id")
+  role                                         role?         @relation(fields: [role_id], references: [id], onDelete: NoAction, map: "fk_role_id_user")
   status                                       status?       @relation(fields: [status_id], references: [id], onDelete: NoAction, map: "fk_status_id_user")
 
   @@index([status_id], map: "fk_status_id_user")
+  @@index([role_id], map: "fk_role_id_user")
 }
 
 model status {
@@ -112,4 +112,5 @@ model location {
 model role {
   id   String @id @unique(map: "id_UNIQUE") @db.VarChar(38)
   name String @unique(map: "name_UNIQUE") @db.VarChar(45)
+  user user[]
 }

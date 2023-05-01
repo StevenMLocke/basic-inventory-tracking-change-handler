@@ -1,14 +1,29 @@
 import { getData } from "@/lib/helpers";
 import ClientWrapper from "./../components/mgmtClientWrapper"
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
+
 export default async function Page() {
+	const session = await getServerSession(authOptions)
 	const apiUrl = process.env.API;
 	const itemName = "User";
 
 	const usersData = getData(`${apiUrl}${itemName.toLowerCase()}/get/${itemName.toLowerCase()}s`);
+	const rolesData = getData(`${apiUrl}/role/get/roles`)
 
-	const [users] = await Promise.all([usersData]);
+	const [users, roles] = await Promise.all([usersData, rolesData]);
 
-	const tableData = users
+	const tableData = users.map(user => {
+		return {
+			id: user.id,
+			fn: user.fn,
+			ln: user.ln,
+			email: user.email,
+			role_name: user.role?.name,
+			role_id: user.role?.id,
+		}
+	})
 
 	const tableColumns = [
 		{
@@ -27,12 +42,21 @@ export default async function Page() {
 		{
 			Header: 'Email',
 			accessor: 'email',
-		}
+		},
+		{
+			Header: 'Role',
+			accessor: 'role_name'
+		},
+		{
+			Header: "",
+			accessor: 'role_id',
+			id: 'role_id'
+		},
 	];
 
 	const tableOptions = {
 		initialState: {
-			hiddenColumns: ["id"],
+			hiddenColumns: ["id", "role_id"],
 		},
 	};
 
@@ -55,21 +79,22 @@ export default async function Page() {
 	];
 
 	const selectFields = [
-		/* 		{
-			id: '',
-			type: '',
-			data: [items].map(item => {
+		{
+			id: 'role_id',
+			type: 'role',
+			data: roles.map(role => {
 				return {
-					id: item.id,
-					name: `<item>`
+					id: role.id,
+					name: role.name
 				}
 			})
 		},
-	 */
+
 	];
 
 	return (
-		<ClientWrapper
+		session.token.role === "admin" ? <ClientWrapper
+			session={session}
 			tableColumns={tableColumns}
 			tableData={tableData}
 			tableOptions={tableOptions}
@@ -77,6 +102,6 @@ export default async function Page() {
 			inputTextArr={textFields}
 			inputSelectArr={selectFields}
 			apiUrl={`${apiUrl}${itemName.toLowerCase()}/`}
-		></ClientWrapper>
+		></ClientWrapper> : redirect('/')
 	);
 }

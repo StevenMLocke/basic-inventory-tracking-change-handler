@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import prisma from '@/lib/db'
-import { cookies } from 'next/headers'
 
 export const authOptions = {
 	providers: [
@@ -24,6 +23,30 @@ export const authOptions = {
 			}
 			return auth
 		},
+		async jwt({ token }) {
+			token.role = null
+			const { role: { name: role } } = await prisma.user.findUnique({
+				where: {
+					email: token.email
+				},
+				select: {
+					role: {
+						select: {
+							name: true
+						}
+					}
+				}
+			})
+
+			if (role) {
+				token.role = role
+			}
+			return token
+		},
+		async session({ session, token }) {
+			session.token = token
+			return session
+		}
 	}
 };
 

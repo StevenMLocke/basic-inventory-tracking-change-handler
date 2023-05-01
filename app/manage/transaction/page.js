@@ -1,5 +1,11 @@
-export default function Page() {
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
+
+export default async function Page() {
+	const session = await getServerSession(authOptions)
+
 	return (
-		<>Manage Transactions</>
+		session.token.role === "admin" ? <>Mange Transactions</> : redirect('/')
 	)
 }
