@@ -41,7 +41,7 @@ export default async function Page() {
 	];
 
 	return (
-		session.token.role === "admin" ? <ClientWrapper
+		session.user.role === "admin" ? <ClientWrapper
 			session={session}
 			tableColumns={tableColumns}
 			tableData={tableData}

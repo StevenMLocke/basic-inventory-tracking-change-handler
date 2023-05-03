@@ -91,6 +91,11 @@ export default function ClientWrapper({
 
 	const editHandler = async (e) => {
 		e.preventDefault();
+		if (session.user.role !== "admin" && formFields.role_name === "admin") {
+			setError("You can not edit an Admin account unless you are an Admin!");
+			return;
+		}
+
 		if (!formFields.id) {
 			setError(`You must select an existing ${itemName} to edit!`);
 			return;
@@ -184,9 +189,9 @@ export default function ClientWrapper({
 				></InfoAlert>
 			)}
 			<div className='flex flex-1 pt-4'>
-				<div className='flex flex-col items-center flex-initial basis-1/4'>
+				<div className='flex flex-col items-center flex-initial basis-1/6 2xl:basis-1/5'>
 					<MgmtTabs
-						role={session.token.role}
+						role={session.user.role}
 						clickHandler={tabClickHandler}
 						selectedTabNum={selected}
 					></MgmtTabs>

@@ -10,7 +10,7 @@ export default async function Page({ params }) {
 	const data = { asset_number: asset_num }
 
 	const asset = await postData('http://localhost:3000/api/asset/get/asset', data)
-	return (session.token.role === "admin" ?
+	return (session.user.role === "admin" ?
 		<div className="flex flex-1 justify-center">
 			<div className="flex flex-col border-2 border-white items-center justify-evenly">
 				<div className="flex border-2 border-red-700 w-full justify-center">

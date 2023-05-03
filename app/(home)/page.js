@@ -1,7 +1,19 @@
 import SectionHero from '@/components/sectionHero'
+import { SignInButton, SignOutButton } from '@/components/logButtons'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '../api/auth/[...nextauth]/route'
 
-export default function Home() {
+export default async function Home() {
+	const session = await getServerSession(authOptions)
 	return (
-		<><SectionHero title={`Basic Inventory Tracking Change Handler`}></SectionHero></>
+
+		<div className='flex flex-col min-w-full items-center'>
+			<SectionHero className='self-start' title={`Basic Inventory Tracking Change Handler`}></SectionHero>
+			{!session && <div className=' flex flex-1 items-center'>
+				<SignInButton buttonText={'Sign In'}></SignInButton>
+			</div>}
+			<pre>{JSON.stringify(session, null, 2)}</pre>
+		</div>
+
 	)
 }

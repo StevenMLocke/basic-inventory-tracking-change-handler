@@ -3,6 +3,10 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
 	const { user } = await req.json()
+	delete user.role_name
+	if (user.authorized_bitch_user) {
+		user.authorized_bitch_user = +user.authorized_bitch_user
+	}
 
 	const editedUser = await prisma.user.update({
 		where: {

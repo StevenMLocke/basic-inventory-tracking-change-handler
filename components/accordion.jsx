@@ -13,11 +13,11 @@ export default function Accordion({ title, children }) {
 					className='flex'
 					onClick={clickHandler}
 				>
-					<div>{title}</div>
+					<div className='prose-xl'>{title}</div>
 					<div className='ml-auto mr-2'>{expanded ? "-" : "+"}</div>
 				</div>
 				<div
-					className={`flex transition-max-height duration-700
+					className={`flex transition-max-height
 						${expanded && "max-h-[16rem]"}
 						${!expanded && "max-h-0"}
 						overflow-hidden

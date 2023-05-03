@@ -5,7 +5,7 @@ export function ErrorAlert({ errorText, dismissHandler }) {
 			onClick={dismissHandler}
 		>
 			<div
-				className='alert alert-error shadow-lg absolute z-30 my-auto'
+				className='alert alert-error shadow-lg absolute z-30 my-auto prose-2xl'
 				onClick={dismissHandler}
 			>
 				<div>
@@ -36,7 +36,7 @@ export function InfoAlert({ infoText, dismissHandler }) {
 			onClick={dismissHandler}
 		>
 			<div
-				className='alert alert-success shadow-lg absolute z-30'
+				className='alert alert-success shadow-lg absolute z-30 my-auto prose-2xl'
 				onClick={dismissHandler}
 			>
 				<div>

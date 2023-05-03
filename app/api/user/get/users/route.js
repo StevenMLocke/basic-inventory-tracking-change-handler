@@ -14,7 +14,8 @@ export async function GET() {
 					status: true,
 				}
 			},
-			role: true
+			role: true,
+			authorized_bitch_user: true,
 		}
 	})
 	return NextResponse.json(users)

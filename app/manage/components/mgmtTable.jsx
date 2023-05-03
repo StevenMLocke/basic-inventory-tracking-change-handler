@@ -31,6 +31,7 @@ export function Table({
 		<div className='flex flex-1 items-start overflow-y-auto max-h-[100cqh] scroll-smooth'>
 			<Flipper
 				flipKey={state}
+				spring={"wobbly"}
 				className='w-full'
 			>
 				<table
@@ -57,7 +58,7 @@ export function Table({
 												{...restCol}
 												className={`${
 													col.isSorted ? "underline" : ""
-												} table-cell`}
+												} table-cell prose-lg`}
 											>
 												{col.render("Header")}
 												<span

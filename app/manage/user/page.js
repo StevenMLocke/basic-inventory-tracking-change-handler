@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 
 export default async function Page() {
 	const session = await getServerSession(authOptions)
+	const role = session?.user.role
 	const apiUrl = process.env.API;
 	const itemName = "User";
 
@@ -22,6 +23,7 @@ export default async function Page() {
 			email: user.email,
 			role_name: user.role?.name,
 			role_id: user.role?.id,
+			authorized_bitch_user: user.authorized_bitch_user
 		}
 	})
 
@@ -54,6 +56,13 @@ export default async function Page() {
 		},
 	];
 
+	if (role === "admin") {
+		tableColumns.push({
+			Header: 'Authorized?',
+			accessor: 'authorized_bitch_user'
+		})
+	}
+
 	const tableOptions = {
 		initialState: {
 			hiddenColumns: ["id", "role_id"],
@@ -78,22 +87,35 @@ export default async function Page() {
 		}
 	];
 
-	const selectFields = [
-		{
-			id: 'role_id',
-			type: 'role',
-			data: roles.map(role => {
-				return {
-					id: role.id,
-					name: role.name
-				}
-			})
-		},
+	let selectFields = []
 
-	];
+	if (role === "admin") {
+		selectFields = [
+			{
+				id: 'role_id',
+				type: 'role',
+				required: false,
+				data: roles.map(role => {
+					return {
+						id: role.id,
+						name: role.name
+					}
+				})
+			},
+			{
+				id: 'authorized_bitch_user',
+				type: 'authorization',
+				required: false,
+				data: [
+					{ id: 1, name: "Authorized" },
+					{ id: 0, name: "Not Authorized" }
+				]
+			}
+		];
+	}
 
 	return (
-		session.token.role === "admin" ? <ClientWrapper
+		(session.user.role === "admin" || session.user.role === "transactor") ? <ClientWrapper
 			session={session}
 			tableColumns={tableColumns}
 			tableData={tableData}

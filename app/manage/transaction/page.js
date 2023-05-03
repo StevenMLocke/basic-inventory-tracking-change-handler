@@ -6,6 +6,6 @@ export default async function Page() {
 	const session = await getServerSession(authOptions)
 
 	return (
-		session.token.role === "admin" ? <>Mange Transactions</> : redirect('/')
+		session.user.role === "admin" ? <>Mange Transactions</> : redirect('/')
 	)
 }
