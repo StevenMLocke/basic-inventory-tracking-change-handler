@@ -7,6 +7,9 @@ module.exports = {
 	],
 	theme: {
 		extend: {
+			fontFamily: {
+				sans: ['var(--font-raleway)']
+			},
 			transitionProperty: {
 				'max-height': 'max-height',
 			},
@@ -19,12 +22,12 @@ module.exports = {
 	],
 	daisyui: {
 		styled: true,
-		themes: ["light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden", "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black", "luxury", "dracula", "cmyk", "autumn", "business", "acid", "lemonade", "night", "coffee", "winter"],
+		themes: ["dark", "bumblebee", "emerald", "corporate", "cyberpunk", "valentine", "halloween", "aqua", "lofi", "wireframe", "black", "luxury", "autumn", "night", "winter"],
 		base: true,
 		utils: true,
 		logs: true,
 		rtl: false,
 		prefix: "",
-		darkTheme: "dracula",
+		darkTheme: "dark",
 	},
 }

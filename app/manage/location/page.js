@@ -6,6 +6,9 @@ import { redirect } from "next/navigation";
 
 export default async function Page() {
 	const session = await getServerSession(authOptions)
+	if (!session) {
+		redirect('/api/auth/signin?callbackUrl=/manage/location')
+	}
 
 	const apiUrl = process.env.API;
 	const itemName = "Location";

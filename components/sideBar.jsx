@@ -15,34 +15,38 @@ export default async function SideBar() {
 					picUrl={session.user.image}
 				></UserCard>
 			)}
-
-			<div className='flex flex-col pt-4'>
-				{session.user.role !== "viewer" && (
+			<div className='flex flex-col border-t-slate-400 border-t-2'>
+				{(session.user.role === "admin" ||
+					session.user.role === "transactor" ||
+					session.user.role === "viewer") && (
 					<Accordion title={"Asset Transactions"}>
 						<ul className='menu menu-compact flex-1 flex-nowrap'>
 							<li>
 								<Link href={"#"}>View</Link>
 							</li>
-							<li>
-								<Link href={"#"}>Check In</Link>
-							</li>
-							<li>
-								<Link href={"#"}>Check Out</Link>
-							</li>
-							<li>
-								<Link href={"#"}>Move</Link>
-							</li>
+							{session.user.role !== "viewer" && (
+								<>
+									<li>
+										<Link href={"/transact/checkin"}>Check In</Link>
+									</li>
+									<li>
+										<Link href={"/transact/checkout"}>Check Out</Link>
+									</li>
+									<li>
+										<Link href={"#"}>Move</Link>
+									</li>
+								</>
+							)}
 						</ul>
 					</Accordion>
 				)}
-				{session.user.role !== "viewer" && (
+				{(session.user.role === "admin" ||
+					session.user.role === "transactor") && (
 					<Accordion title={"Manage"}>
 						<ul className='menu menu-compact flex-1 flex-nowrap'>
-							{session.user.role !== "viewer" && (
-								<li>
-									<Link href={"/manage/user"}>Users</Link>
-								</li>
-							)}
+							<li>
+								<Link href={"/manage/user"}>Users</Link>
+							</li>
 							{session.user.role === "admin" && (
 								<li>
 									<Link href={"/manage/asset"}>Assets</Link>

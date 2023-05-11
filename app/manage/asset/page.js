@@ -6,12 +6,16 @@ import { redirect } from "next/navigation";
 
 export default async function Page() {
 	const session = await getServerSession(authOptions)
+	if (!session) {
+		redirect('/api/auth/signin?callbackUrl=/manage/asset')
+	}
+
 	const itemName = 'Asset'
 
 	const apiUrl = process.env.API
 	const assetsData = getData(`${apiUrl}asset/get/assets`)
-	const modelsData = getData(`${apiUrl}model/get/models`)
-	const locationsData = getData(`${apiUrl}location/get/locations`)
+	const modelsData = getData(`${apiUrl}model/get/models`, { next: { revalidate: 100 } })
+	const locationsData = getData(`${apiUrl}location/get/locations`, { next: { revalidate: 100 } })
 
 	const [assets, models, locations] = await Promise.all([assetsData, modelsData, locationsData])
 
@@ -26,6 +30,9 @@ export default async function Page() {
 			manufacturer: asset.model.manufacturer.name,
 			location_id: asset.location?.id,
 			location_name: asset.location?.name,
+			status_name: asset.status?.name,
+			status_id: asset?.status?.id,
+			user_email: asset.user?.email
 		})
 	})
 
@@ -65,6 +72,19 @@ export default async function Page() {
 			Header: 'Location',
 			accessor: 'location_name'
 		},
+		{
+			Header: 'Status',
+			accessor: 'status_name'
+		},
+		{
+			Header: '',
+			accessor: 'status_id',
+			id: 'status_id'
+		},
+		{
+			Header: 'User Email',
+			accessor: 'user_email'
+		}
 	]
 
 	const tableOptions = {
@@ -73,6 +93,7 @@ export default async function Page() {
 				"id",
 				"model_id",
 				"location_id",
+				"status_id"
 			]
 		}
 	}

@@ -14,7 +14,7 @@ export function UserCard({ name, email, picUrl }) {
 			<Flipped flipId={"card"}>
 				<div
 					className={`${!opened && "max-h-20 max-w-[5rem] overflow-hidden"}
-							card card-side card-compact card-bordered flex bg-base-100 transition-max-height`}
+							card 2xl:card-side card-compact card-bordered flex bg-base-100 transition-max-height`}
 					onClick={() => {
 						setOpened((p) => !p);
 					}}
@@ -39,7 +39,7 @@ export function UserCard({ name, email, picUrl }) {
 						<div
 							className={`
 									${opened && "card-body"}
-									${!opened && " flex flex-0 max-w-0 overflow-hidden"}
+									${!opened && " flex flex-0 max-h-0 max-w-0 overflow-hidden"}
 								`}
 						>
 							<h2 className={`card-title`}>{name}</h2>

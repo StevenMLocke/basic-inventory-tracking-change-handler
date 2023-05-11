@@ -4,14 +4,18 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 
-export default async function Page() {
+export default async function Page(req) {
 	const session = await getServerSession(authOptions)
+	if (!session) {
+		redirect('/api/auth/signin?callbackUrl=/manage/user')
+	}
+
 	const role = session?.user.role
 	const apiUrl = process.env.API;
 	const itemName = "User";
 
 	const usersData = getData(`${apiUrl}${itemName.toLowerCase()}/get/${itemName.toLowerCase()}s`);
-	const rolesData = getData(`${apiUrl}/role/get/roles`)
+	const rolesData = getData(`${apiUrl}/role/get/roles`, { next: { revalidate: 100 } })
 
 	const [users, roles] = await Promise.all([usersData, rolesData]);
 
@@ -23,7 +27,7 @@ export default async function Page() {
 			email: user.email,
 			role_name: user.role?.name,
 			role_id: user.role?.id,
-			authorized_bitch_user: user.authorized_bitch_user
+			authorized_bitch_user: user.authorized_bitch_user ? 'Yes' : 'No'
 		}
 	})
 
@@ -115,7 +119,8 @@ export default async function Page() {
 	}
 
 	return (
-		(session.user.role === "admin" || session.user.role === "transactor") ? <ClientWrapper
+		(session?.user.role === "admin" || session?.user.role === "transactor") ? <ClientWrapper
+			req={req}
 			session={session}
 			tableColumns={tableColumns}
 			tableData={tableData}

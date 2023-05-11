@@ -1,5 +1,5 @@
 "use client";
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import SectionHero from "@/components/sectionHero";
@@ -21,6 +21,9 @@ export default function ClientWrapper({
 	children, //for testing
 }) {
 	const router = useRouter();
+
+	const memoTableData = useMemo(() => tableData, [tableData]);
+	const memoTableColumns = useMemo(() => tableColumns, [tableColumns]);
 
 	const [isPending, startTransition] = useTransition();
 	const [selected, setSelected] = useState(1);
@@ -226,10 +229,10 @@ export default function ClientWrapper({
 					</div>
 				</div>
 				<div className='divider divider-horizontal h-[90%] my-auto'></div>
-				{tableData && tableData.length !== 0 && (
+				{memoTableData && memoTableData.length !== 0 && (
 					<Table
-						tableData={tableData}
-						tableColumns={tableColumns}
+						tableData={memoTableData}
+						tableColumns={memoTableColumns}
 						selectHandler={tableRowSelectHandler}
 						selectedTab={selected}
 						activeRowId={activeRowId}
@@ -237,8 +240,8 @@ export default function ClientWrapper({
 					></Table>
 				)}
 			</div>
-			<pre>{JSON.stringify(formFields, null, 2)}</pre>
-			<pre>{JSON.stringify(session, null, 2)}</pre>
+			{/* 			<pre>{JSON.stringify(formFields, null, 2)}</pre>
+			<pre>{JSON.stringify(session, null, 2)}</pre>*/}
 			{children}
 		</div>
 	);

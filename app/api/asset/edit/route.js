@@ -7,6 +7,8 @@ export async function POST(req) {
 	delete asset.model
 	delete asset.manufacturer
 	delete asset.location_name
+	delete asset.status_name
+	delete asset.user_email
 
 	const editedAsset = await prisma.asset.update({
 		where: {

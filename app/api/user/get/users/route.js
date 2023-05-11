@@ -9,11 +9,6 @@ export async function GET() {
 			ln: true,
 			full_name: true,
 			email: true,
-			status: {
-				select: {
-					status: true,
-				}
-			},
 			role: true,
 			authorized_bitch_user: true,
 		}

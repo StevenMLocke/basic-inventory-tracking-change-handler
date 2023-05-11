@@ -6,6 +6,9 @@ import { redirect } from "next/navigation";
 
 export default async function Page() {
 	const session = await getServerSession(authOptions)
+	if (!session) {
+		redirect('/api/auth/signin?callbackUrl=/manage/status')
+	}
 
 	const apiUrl = process.env.API;
 	const itemName = "Status";
@@ -25,7 +28,7 @@ export default async function Page() {
 		},
 		{
 			Header: "Status",
-			accessor: 'status'
+			accessor: 'name'
 		}
 	];
 
@@ -37,7 +40,7 @@ export default async function Page() {
 
 	const textFields = [
 		{
-			id: 'status', //db column
+			id: 'name', //db column
 			name: 'status',
 			inputType: 'text',
 		},

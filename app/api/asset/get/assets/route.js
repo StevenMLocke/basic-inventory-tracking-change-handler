@@ -26,7 +26,14 @@ export async function GET() {
 			},
 			serial_number: true,
 			status: true,
-			user: true,
+			user: {
+				select: {
+					fn: true,
+					ln: true,
+					full_name: true,
+					email: true
+				}
+			},
 		},
 		orderBy: {
 			asset_number: 'asc'

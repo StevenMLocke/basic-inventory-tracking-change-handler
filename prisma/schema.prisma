@@ -24,7 +24,7 @@ model asset {
   user                user?         @relation(fields: [assigned_to_user_id], references: [id], onDelete: NoAction, map: "fk_user_id")
   location            location?     @relation(fields: [location_id], references: [id], onDelete: NoAction, map: "fk_location_id_asset")
   model               model         @relation(fields: [model_id], references: [id], onDelete: NoAction, map: "fk_model_id")
-  status              status?       @relation(fields: [status_id], references: [id], onDelete: NoAction, map: "fk_status_id_asset")
+  status              status?       @relation(fields: [status_id], references: [id], map: "fk_status_id_asset")
   transaction         transaction[]
 
   @@index([model_id], map: "fk_model_id")
@@ -50,14 +50,9 @@ model model {
   @@index([manufacturer_id], map: "fk_manfacturer_id_idx")
 }
 
-model permission {
-  id   String @id @db.VarChar(38)
-  type String @db.VarChar(64)
-}
-
 model transaction {
   id                                    String    @id @unique(map: "transaction_id_UNIQUE") @db.VarChar(38)
-  date                                  DateTime  @db.Timestamp(0)
+  date                                  DateTime  @db.Date
   asset_id                              String    @db.VarChar(38)
   action_id                             String    @db.VarChar(38)
   action_user_id                        String    @db.VarChar(38)
@@ -82,24 +77,20 @@ model user {
   ln                                           String        @db.VarChar(45)
   full_name                                    String        @db.VarChar(255)
   email                                        String        @unique(map: "email_UNIQUE") @db.VarChar(45)
-  status_id                                    String?       @db.VarChar(38)
   authorized_bitch_user                        Int           @default(0) @db.TinyInt
   role_id                                      String?       @db.VarChar(45)
   asset                                        asset[]
   transaction_transaction_action_user_idTouser transaction[] @relation("transaction_action_user_idTouser")
   transaction_transaction_asset_user_idTouser  transaction[] @relation("transaction_asset_user_idTouser")
   role                                         role?         @relation(fields: [role_id], references: [id], onDelete: NoAction, map: "fk_role_id_user")
-  status                                       status?       @relation(fields: [status_id], references: [id], onDelete: NoAction, map: "fk_status_id_user")
 
-  @@index([status_id], map: "fk_status_id_user")
   @@index([role_id], map: "fk_role_id_user")
 }
 
 model status {
-  id     String  @id @db.VarChar(38)
-  status String  @db.VarChar(255)
-  asset  asset[]
-  user   user[]
+  id    String  @id @db.VarChar(38)
+  name  String  @db.VarChar(255)
+  asset asset[]
 }
 
 model location {

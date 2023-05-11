@@ -1,14 +1,24 @@
 "use client";
-export function MgmtForm({ children, buttonClickHandler, buttonText }) {
+export function MgmtForm({
+	children,
+	buttonClickHandler,
+	buttonText,
+	className,
+	includeButton,
+}) {
 	return (
 		<form
-			className='flex flex-col items-center mx-auto my-2 gap-2'
+			className={`${className} flex flex-col items-center mx-auto my-2 gap-2`}
 			onSubmit={buttonClickHandler}
 		>
 			{children}
-			<button className='btn btn-primary btn-sm bg-neutral-focus btn-outline'>
-				{buttonText}
-			</button>
+			{!(includeButton === false) ? (
+				<button className={`btn btn-primary btn-sm bg-inherit btn-outline`}>
+					{buttonText}
+				</button>
+			) : (
+				<></>
+			)}
 		</form>
 	);
 }
@@ -20,11 +30,15 @@ export function MgmtFormTextInput({
 	changeHandler,
 	disabledValue,
 	focusHandler,
+	blurHandler,
 	inputType,
 	required,
+	submitHandler,
+	ref,
 }) {
 	return (
 		<input
+			ref={ref}
 			required={required ?? true}
 			className='input input-bordered input-sm w-full max-w-xs form-control'
 			id={id}
@@ -32,7 +46,9 @@ export function MgmtFormTextInput({
 			type={inputType ?? "text"}
 			value={value || ""}
 			onFocus={focusHandler}
+			onBlur={blurHandler}
 			onChange={changeHandler}
+			onSubmit={submitHandler}
 			disabled={disabledValue}
 		></input>
 	);

@@ -5,11 +5,14 @@ import { redirect } from "next/navigation";
 
 export default async function Page({ params }) {
 	const session = await getServerSession(authOptions)
+	if (!session) {
+		redirect('/api/auth/signin')
+	}
 
 	const { asset_num } = params
 	const data = { asset_number: asset_num }
 
-	const asset = await postData('http://localhost:3000/api/asset/get/asset', data)
+	const asset = await postData(`$process.env.API{}asset/get/asset`, data)
 	return (session.user.role === "admin" ?
 		<div className="flex flex-1 justify-center">
 			<div className="flex flex-col border-2 border-white items-center justify-evenly">

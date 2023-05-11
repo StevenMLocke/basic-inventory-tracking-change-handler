@@ -36,7 +36,7 @@ export function Table({
 			>
 				<table
 					{...getTableProps()}
-					className='w-full table table-auto table-compact border-separate'
+					className='w-full table table-auto table-compact bg-primary'
 				>
 					<thead className='table-header-group sticky top-0'>
 						{headerGroups.map((headerGroup) => {
@@ -89,7 +89,9 @@ export function Table({
 										key={key}
 										{...restRowProps}
 										className={`table-row hover hover:cursor-pointer ${
-											row.index === activeRowId ? "border-2 border-white" : null
+											row.index === activeRowId
+												? "border-2 border-primary-focus"
+												: null
 										}`}
 										onClick={(e) =>
 											selectHandler(e, row.values, selectedTab, row.index)
@@ -101,6 +103,7 @@ export function Table({
 												<td
 													key={key}
 													{...restCellProps}
+													className='slashed-zero'
 												>
 													{cell.render("Cell")}
 												</td>
