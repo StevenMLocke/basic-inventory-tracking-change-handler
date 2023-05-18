@@ -16,7 +16,7 @@ export default async function Page() {
 	const assetsData = getData(`${apiUrl}asset/get/assets`)
 	const modelsData = getData(`${apiUrl}model/get/models`, { next: { revalidate: 100 } })
 
-	const [assets, models] = await Promise.all([assetsData, modelsData, locationsData])
+	const [assets, models] = await Promise.all([assetsData, modelsData])
 
 
 	const tableData = assets?.map((asset) => {
