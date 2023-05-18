@@ -15,9 +15,8 @@ export default async function Page() {
 	const apiUrl = process.env.API
 	const assetsData = getData(`${apiUrl}asset/get/assets`)
 	const modelsData = getData(`${apiUrl}model/get/models`, { next: { revalidate: 100 } })
-	const locationsData = getData(`${apiUrl}location/get/locations`, { next: { revalidate: 100 } })
 
-	const [assets, models, locations] = await Promise.all([assetsData, modelsData, locationsData])
+	const [assets, models] = await Promise.all([assetsData, modelsData, locationsData])
 
 
 	const tableData = assets?.map((asset) => {
