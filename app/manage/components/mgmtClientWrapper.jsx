@@ -125,6 +125,15 @@ export default function ClientWrapper({
 			return;
 		}
 
+		if (formFields.email) {
+			if (session.user.email === formFields.email) {
+				setError(
+					"You know full-well that you can not delete your own account."
+				);
+				return;
+			}
+		}
+
 		const data = { id: formFields.id };
 
 		await postData(`${apiUrl}remove`, data).then((json) => {
@@ -191,7 +200,7 @@ export default function ClientWrapper({
 					dismissHandler={infoAlertDismissHandler}
 				></InfoAlert>
 			)}
-			<div className='flex flex-1 pt-4'>
+			<div className='flex flex-1 pt-4 overflow-hidden'>
 				<div className='flex flex-col items-center flex-initial basis-1/6 2xl:basis-1/5'>
 					<MgmtTabs
 						role={session.user.role}
@@ -240,8 +249,8 @@ export default function ClientWrapper({
 					></Table>
 				)}
 			</div>
-			{/* 			<pre>{JSON.stringify(formFields, null, 2)}</pre>
-			<pre>{JSON.stringify(session, null, 2)}</pre>*/}
+			{/* 			<pre>{JSON.stringify(formFields, null, 2)}</pre> */}
+			{/* 			<pre>{JSON.stringify(session, null, 2)}</pre> */}
 			{children}
 		</div>
 	);

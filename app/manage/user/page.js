@@ -119,16 +119,17 @@ export default async function Page(req) {
 	}
 
 	return (
-		(session?.user.role === "admin" || session?.user.role === "transactor") ? <ClientWrapper
-			req={req}
-			session={session}
-			tableColumns={tableColumns}
-			tableData={tableData}
-			tableOptions={tableOptions}
-			itemName={`${itemName}`}
-			inputTextArr={textFields}
-			inputSelectArr={selectFields}
-			apiUrl={`${apiUrl}${itemName.toLowerCase()}/`}
-		></ClientWrapper> : redirect('/')
+		(session?.user.role === "admin" || session?.user.role === "transactor" ||
+			session.user.role === "asset manager") ? <ClientWrapper
+				req={req}
+				session={session}
+				tableColumns={tableColumns}
+				tableData={tableData}
+				tableOptions={tableOptions}
+				itemName={`${itemName}`}
+				inputTextArr={textFields}
+				inputSelectArr={selectFields}
+				apiUrl={`${apiUrl}${itemName.toLowerCase()}/`}
+			></ClientWrapper> : redirect('/')
 	);
 }

@@ -47,14 +47,15 @@ export default async function Page() {
 	];
 
 	return (
-		session.user.role === "admin" ? <ClientWrapper
-			session={session}
-			tableColumns={tableColumns}
-			tableData={tableData}
-			tableOptions={tableOptions}
-			itemName={`${itemName}`}
-			inputTextArr={textFields}
-			apiUrl={`${apiUrl}${itemName.toLowerCase()}/`}
-		></ClientWrapper> : redirect('/')
+		session.user.role === "admin" ||
+			session.user.role === "asset manager" ? <ClientWrapper
+				session={session}
+				tableColumns={tableColumns}
+				tableData={tableData}
+				tableOptions={tableOptions}
+				itemName={`${itemName}`}
+				inputTextArr={textFields}
+				apiUrl={`${apiUrl}${itemName.toLowerCase()}/`}
+			></ClientWrapper> : redirect('/')
 	);
 }

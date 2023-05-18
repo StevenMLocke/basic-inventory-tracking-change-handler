@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useTable, useSortBy } from "react-table";
+import { useTable, useSortBy, useFlexLayout } from "react-table";
 import { Flipper, Flipped } from "react-flip-toolkit";
 
 export function Table({

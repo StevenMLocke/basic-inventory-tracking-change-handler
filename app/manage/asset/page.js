@@ -44,7 +44,8 @@ export default async function Page() {
 		},
 		{
 			Header: 'Asset #',
-			accessor: 'asset_number'
+			accessor: 'asset_number',
+			maxWidth: 75
 		},
 		{
 			Header: 'Model',
@@ -81,10 +82,6 @@ export default async function Page() {
 			accessor: 'status_id',
 			id: 'status_id'
 		},
-		{
-			Header: 'User Email',
-			accessor: 'user_email'
-		}
 	]
 
 	const tableOptions = {
@@ -123,24 +120,19 @@ export default async function Page() {
 				}
 			})
 		},
-		{
-			id: 'location_id',
-			type: 'location',
-			data: locations,
-			required: false
-		},
 	]
 
 	return (
-		session.user.role === "admin" ? <ClientWrapper
-			session={session}
-			tableColumns={tableColumns}
-			tableData={tableData}
-			tableOptions={tableOptions}
-			itemName={`${itemName}`}
-			inputTextArr={textFields}
-			inputSelectArr={selectFields}
-			apiUrl={`${apiUrl}${itemName.toLowerCase()}/`}
-		></ClientWrapper> : redirect('/')
+		session.user.role === "admin" ||
+			session.user.role === "asset manager" ? <ClientWrapper
+				session={session}
+				tableColumns={tableColumns}
+				tableData={tableData}
+				tableOptions={tableOptions}
+				itemName={`${itemName}`}
+				inputTextArr={textFields}
+				inputSelectArr={selectFields}
+				apiUrl={`${apiUrl}${itemName.toLowerCase()}/`}
+			></ClientWrapper> : redirect('/')
 	)
 }

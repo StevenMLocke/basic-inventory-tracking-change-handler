@@ -171,7 +171,7 @@ export function TransactionClientWrapper({
 								<h2 className='prose-xl font-semibold'>Asset Number Search</h2>
 								{formInputs(textFieldsArray, selectArray, false)}
 
-								{filteredAssets.length === 1 && (
+								{filteredAssets.length === 1 && query && (
 									<AssetCard
 										asset={filteredAssets[0]}
 										clickHandler={clickHandler}
@@ -184,7 +184,7 @@ export function TransactionClientWrapper({
 									{assets.length} assets currently {assetState}.
 								</h3>
 							</div>
-							<pre>{JSON.stringify(filteredAssets, null, 2)}</pre>
+							{/* 							<pre>{JSON.stringify(filteredAssets, null, 2)}</pre> */}
 						</div>
 					</div>
 				</div>

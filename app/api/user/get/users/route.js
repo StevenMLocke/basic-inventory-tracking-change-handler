@@ -1,7 +1,7 @@
+//import { PrismaClient } from '@prisma/client'
 import prisma from '@/lib/db'
 import { NextResponse } from 'next/server'
 export async function GET() {
-
 	const users = await prisma.user.findMany({
 		select: {
 			id: true,
@@ -11,6 +11,9 @@ export async function GET() {
 			email: true,
 			role: true,
 			authorized_bitch_user: true,
+		},
+		orderBy: {
+			full_name: 'asc'
 		}
 	})
 	return NextResponse.json(users)

@@ -12,9 +12,9 @@ export default async function Page() {
 
 	const apiUrl = process.env.API;
 
-	const actionsData = getData(`${apiUrl}action/get/actions`)
-	const locationsData = getData(`${apiUrl}location/get/locations`)
-	const statusData = getData(`${apiUrl}status/get/statuses`)
+	const actionsData = getData(`${apiUrl}action/get/actions`, { next: { revalidate: 100 } })
+	const locationsData = getData(`${apiUrl}location/get/locations`, { next: { revalidate: 100 } })
+	const statusData = getData(`${apiUrl}status/get/statuses`, { next: { revalidate: 100 } })
 
 	const [actions, locations, statuses] = await Promise.all([actionsData, locationsData, statusData])
 

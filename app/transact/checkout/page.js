@@ -12,10 +12,10 @@ export default async function Page() {
 
 	const apiUrl = process.env.API;
 
-	const actionsData = getData(`${apiUrl}action/get/actions`, { cache: 'force-cache' })
-	const locationsData = getData(`${apiUrl}location/get/locations`, { cache: 'force-cache' })
-	const statusData = getData(`${apiUrl}status/get/statuses`, { cache: 'force-cache' })
-	const usersData = getData(`${apiUrl}user/get/users`)
+	const actionsData = getData(`${apiUrl}action/get/actions`, { next: { revalidate: 100 } })
+	const locationsData = getData(`${apiUrl}location/get/locations`, { next: { revalidate: 100 } })
+	const statusData = getData(`${apiUrl}status/get/statuses`, { next: { revalidate: 100 } })
+	const usersData = getData(`${apiUrl}user/get/users`, { next: { revalidate: 100 } })
 
 	const [actions, locations, statuses, users] = await Promise.all([actionsData, locationsData, statusData, usersData])
 

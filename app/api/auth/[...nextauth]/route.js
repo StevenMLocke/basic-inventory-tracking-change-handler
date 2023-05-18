@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import prisma from '@/lib/db'
 import { redirect } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
 
 export const authOptions = {
 	providers: [
@@ -10,19 +11,42 @@ export const authOptions = {
 			clientSecret: process.env.GOOGLE_SECRET
 		})],
 	callbacks: {
-		async signIn({ user }) {
+		async signIn({ user, profile }) {
 			let auth = false
 
-			const { authorized_bitch_user } = await prisma.user.findUnique({
+			const registeredUser = await prisma.user.findUnique({
 				where: {
 					email: user.email
 				}
 			})
 
-			if (authorized_bitch_user) {
-				auth = !auth
+			if (registeredUser) {
+				if (registeredUser.authorized_bitch_user) {
+					auth = !auth
+					return auth
+				}
+				return '/auth/unauthorized'
 			}
-			return auth
+			const role = await prisma.role.findUnique({
+				where: {
+					name: 'asset user'
+				},
+				select: {
+					id: true
+				}
+			})
+
+			const registeringUser = {
+				id: uuidv4(),
+				fn: profile.given_name,
+				ln: profile.family_name,
+				full_name: profile.name,
+				email: profile.email,
+				authorized_bitch_user: 0,
+				role_id: role.id
+			}
+			const newUser = await prisma.user.create({ data: registeringUser })
+			return '/auth/register'
 		},
 		async jwt({ token }) {
 			token.role = null
@@ -51,6 +75,7 @@ export const authOptions = {
 			if (fn) {
 				token.user_name = `${fn} ${ln}`
 			}
+
 			return token
 		},
 		async session({ session, token }) {
@@ -68,6 +93,9 @@ export const authOptions = {
 	},
 	jwt: {
 		maxAge: 60 * 60 * 8,
+	},
+	pages: {
+		newUser: '/auth/register'
 	}
 };
 
