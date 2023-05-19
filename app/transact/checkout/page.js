@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { redirect } from "next/navigation"
 import { TransactionClientWrapper } from './../components/tClientWrapper'
-import { getData, postData } from '@/lib/helpers'
+import prisma from "@/lib/db"
 
 export default async function Page() {
 	const session = await getServerSession(authOptions)
@@ -12,16 +12,53 @@ export default async function Page() {
 
 	const apiUrl = process.env.API;
 
-	const actionsData = getData(`${apiUrl}action/get/actions`, { next: { revalidate: 100 } })
-	const locationsData = getData(`${apiUrl}location/get/locations`, { next: { revalidate: 100 } })
-	const statusData = getData(`${apiUrl}status/get/statuses`, { next: { revalidate: 100 } })
-	const usersData = getData(`${apiUrl}user/get/users`, { next: { revalidate: 100 } })
+	const actions = await prisma.action.findMany()
+	const locations = await prisma.location.findMany()
+	const statuses = await prisma.status.findMany()
+	const users = await prisma.user.findMany({
+		select: {
+			id: true,
+			fn: true,
+			ln: true,
+			full_name: true,
+			email: true,
+			role: true,
+			authorized_bitch_user: true,
+		},
+		orderBy: {
+			ln: 'asc'
+		}
+	})
 
-	const [actions, locations, statuses, users] = await Promise.all([actionsData, locationsData, statusData, usersData])
+	const [{ id }] = statuses.filter(status => { return status.name === "Checked In" })
 
-	const checkedInStatus = statuses.filter(status => { return status.name === "Checked In" })
-
-	const assets = await postData(`${apiUrl}asset/get/assets/byStatus`, checkedInStatus[0])
+	const assets = await prisma.asset.findMany({
+		select: {
+			id: true,
+			asset_number: true,
+			serial_number: true,
+			model: {
+				select: {
+					manufacturer: {
+						select: {
+							name: true,
+						}
+					},
+					name: true,
+				}
+			},
+			user: {
+				select: {
+					id: true,
+					full_name: true,
+					email: true
+				}
+			},
+		},
+		where: {
+			status_id: id
+		}
+	})
 
 	const ids = {
 		status: {
@@ -70,7 +107,7 @@ export default async function Page() {
 		},
 	];
 
-	return (session?.user.role === "admin" || session?.user.role === "transactor") ?
+	return (session?.user.role === "admin" || session?.user.role === "transactor" || session.user.role === "asset manager") ?
 		<>
 			<TransactionClientWrapper
 				ids={ids}

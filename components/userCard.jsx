@@ -13,7 +13,7 @@ export function UserCard({ name, email, picUrl }) {
 		>
 			<Flipped flipId={"card"}>
 				<div
-					className={`${!opened && "max-h-20 max-w-[5rem] overflow-hidden"}
+					className={`${!opened && "max-h-20 max-w-[5rem] overflow-hidden "}
 							card 2xl:card-side card-compact card-bordered flex bg-base-100 transition-max-height`}
 					onClick={() => {
 						setOpened((p) => !p);

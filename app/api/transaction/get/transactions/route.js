@@ -17,7 +17,8 @@ export async function GET() {
 								}
 							}
 						}
-					}
+					},
+					serial_number: true
 				}
 			},
 			action: {

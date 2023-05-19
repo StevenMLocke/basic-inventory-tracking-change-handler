@@ -1,8 +1,9 @@
-import { getData } from "@/lib/helpers";
+//import { getData } from "@/lib/helpers";
 import ClientWrapper from "./../components/mgmtClientWrapper";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import prisma from "@/lib/db";
 
 export default async function Page() {
 	const session = await getServerSession(authOptions)
@@ -12,8 +13,10 @@ export default async function Page() {
 
 	const apiUrl = process.env.API;
 	const itemName = "Action";
-	const actionsData = getData(`${apiUrl}${itemName.toLowerCase()}/get/${itemName.toLowerCase()}s`);
-	const [actions] = await Promise.all([actionsData]);
+	/* 	const actionsData = getData(`${apiUrl}${itemName.toLowerCase()}/get/${itemName.toLowerCase()}s`);
+		const [actions] = await Promise.all([actionsData]); */
+
+	const actions = await prisma.action.findMany()
 
 	const tableData = actions;
 

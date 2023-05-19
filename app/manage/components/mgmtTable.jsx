@@ -36,7 +36,7 @@ export function Table({
 			>
 				<table
 					{...getTableProps()}
-					className='w-full table table-auto table-compact bg-primary'
+					className='w-full table table-auto table-compact bg-neutral'
 				>
 					<thead className='table-header-group sticky top-0'>
 						{headerGroups.map((headerGroup) => {

@@ -13,9 +13,11 @@ export default function Accordion({ title, children }) {
 					className='flex'
 					onClick={clickHandler}
 				>
-					<div className='prose-xl font-semibold'>{title}</div>
-					<div className=' prose-2xl font-bold ml-auto mr-2'>
-						{expanded ? "-" : "+"}
+					<div className='flex flex-1 gap-2 justify-between'>
+						<div className='prose-xl font-semibold'>{title}</div>
+						<div className=' prose-2xl font-bold ml-auto mr-2'>
+							{expanded ? ` -` : ` +`}
+						</div>
 					</div>
 				</div>
 				<div

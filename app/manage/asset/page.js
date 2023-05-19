@@ -1,8 +1,9 @@
-import { getData } from "@/lib/helpers"
+//import { getData } from "@/lib/helpers"
 import ClientWrapper from './../components/mgmtClientWrapper'
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import prisma from "@/lib/db";
 
 export default async function Page() {
 	const session = await getServerSession(authOptions)
@@ -13,10 +14,62 @@ export default async function Page() {
 	const itemName = 'Asset'
 
 	const apiUrl = process.env.API
-	const assetsData = getData(`${apiUrl}asset/get/assets`)
-	const modelsData = getData(`${apiUrl}model/get/models`, { next: { revalidate: 100 } })
 
-	const [assets, models] = await Promise.all([assetsData, modelsData])
+	const assets = await prisma.asset.findMany({
+		select: {
+			id: true,
+			model: {
+				select: {
+					id: true,
+					name: true,
+					manufacturer: {
+						select: {
+							id: true,
+							name: true
+						}
+					}
+				}
+			},
+			asset_number: true,
+			location: {
+				select: {
+					id: true,
+					name: true
+				}
+			},
+			serial_number: true,
+			status: true,
+			user: {
+				select: {
+					fn: true,
+					ln: true,
+					full_name: true,
+					email: true
+				}
+			},
+		},
+		orderBy: {
+			asset_number: 'asc'
+		}
+	})
+
+	const models = await prisma.model.findMany({
+		select: {
+			id: true,
+			name: true,
+			manufacturer: {
+				select: {
+					id: true,
+					name: true
+				}
+			}
+		},
+		orderBy: {
+			manufacturer: {
+				name: 'asc'
+			}
+		}
+	})
 
 
 	const tableData = assets?.map((asset) => {

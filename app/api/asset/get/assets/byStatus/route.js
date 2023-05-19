@@ -27,7 +27,7 @@ export async function POST(req) {
 			},
 		},
 		where: {
-			status_id: status.id
+			status_id: status
 		}
 	})
 	return NextResponse.json(assetsByStatus)

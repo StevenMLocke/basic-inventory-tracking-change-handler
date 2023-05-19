@@ -3,6 +3,7 @@ import ClientWrapper from "./../components/mgmtClientWrapper";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import prisma from '@/lib/db'
 
 export default async function Page() {
 	const session = await getServerSession(authOptions)
@@ -12,11 +13,13 @@ export default async function Page() {
 
 	const apiUrl = process.env.API;
 	const itemName = "Status";
-	const statusesData = getData(
-		`${apiUrl}${itemName.toLowerCase()}/get/${itemName.toLowerCase()}es`
-	);
+	/* 	const statusesData = getData(
+			`${apiUrl}${itemName.toLowerCase()}/get/${itemName.toLowerCase()}es`
+		);
+	
+		const [statuses] = await Promise.all([statusesData]); */
 
-	const [statuses] = await Promise.all([statusesData]);
+	const statuses = await prisma.status.findMany()
 
 	const tableData = statuses
 

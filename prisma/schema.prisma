@@ -88,8 +88,8 @@ model user {
 }
 
 model status {
-  id    String  @id @db.VarChar(38)
-  name  String  @db.VarChar(255)
+  id    String  @id @unique(map: "id_UNIQUE") @db.VarChar(38)
+  name  String  @unique(map: "name_UNIQUE") @db.VarChar(255)
   asset asset[]
 }
 

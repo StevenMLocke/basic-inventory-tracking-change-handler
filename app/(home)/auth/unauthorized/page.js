@@ -1,3 +1,3 @@
-export default function Page() {
-	return <>You are not authorized</>
+export default async function Page() {
+	return <>You are not authorized.</>
 }

@@ -1,8 +1,9 @@
-import { getData } from "@/lib/helpers";
+//import { getData } from "@/lib/helpers";
 import ClientWrapper from "./../components/mgmtClientWrapper";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import prisma from "@/lib/db";
 
 export default async function Page() {
 	const session = await getServerSession(authOptions)
@@ -12,10 +13,30 @@ export default async function Page() {
 
 	const apiUrl = process.env.API;
 	const itemName = "Model";
-	const modelsData = getData(`${apiUrl}${itemName.toLowerCase()}/get/${itemName.toLowerCase()}s`);
-	const manufacturersData = getData(`${apiUrl}manufacturer/get/manufacturers`, { next: { revalidate: 100 } })
+	/* 	const modelsData = getData(`${apiUrl}${itemName.toLowerCase()}/get/${itemName.toLowerCase()}s`);
+		const manufacturersData = getData(`${apiUrl}manufacturer/get/manufacturers`, { next: { revalidate: 100 } })
+	
+		const [models, manufacturers] = await Promise.all([modelsData, manufacturersData]); */
 
-	const [models, manufacturers] = await Promise.all([modelsData, manufacturersData]);
+	const models = await prisma.model.findMany({
+		select: {
+			id: true,
+			name: true,
+			manufacturer: {
+				select: {
+					id: true,
+					name: true
+				}
+			}
+		},
+		orderBy: {
+			manufacturer: {
+				name: 'asc'
+			}
+		}
+	})
+
+	const manufacturers = await prisma.manufacturer.findMany()
 
 	const tableData = models.map(model => {
 		return ({

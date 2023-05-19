@@ -18,11 +18,32 @@ export default async function SideBar({ session }) {
 						session.user.role === "transactor" ||
 						session.user.role === "viewer" ||
 						session.user.role === "asset manager") && (
-						<Accordion title={"Asset Transactions"}>
+						<Accordion title={"View"}>
 							<ul className='menu menu-compact flex-1 flex-nowrap'>
 								<li>
-									<Link href={"/transact/view"}>View</Link>
+									<Link href={"/view/alltransactions"}>All Transactions</Link>
 								</li>
+								<li>
+									<Link href={"/view/"}>Transaction by User</Link>
+								</li>
+								<li>
+									<Link href={"/view/"}>Transaction by Asset User</Link>
+								</li>
+								<li>
+									<Link href={"/view/"}>Transaction by Date</Link>
+								</li>
+								<li>
+									<Link href={"/view/"}>Transaction by Asset Number</Link>
+								</li>
+							</ul>
+						</Accordion>
+					)}
+					{(session.user.role === "admin" ||
+						session.user.role === "transactor" ||
+						session.user.role === "viewer" ||
+						session.user.role === "asset manager") && (
+						<Accordion title={"Transact"}>
+							<ul className='menu menu-compact flex-1 flex-nowrap'>
 								{session.user.role !== "viewer" && (
 									<>
 										<li>
@@ -34,6 +55,11 @@ export default async function SideBar({ session }) {
 										<li>
 											<Link href={"#"}>Move</Link>
 										</li>
+										{session.user.role === "admin" && (
+											<li>
+												<Link href={"/transact/"}>Destroy/Dispose</Link>
+											</li>
+										)}
 									</>
 								)}
 							</ul>

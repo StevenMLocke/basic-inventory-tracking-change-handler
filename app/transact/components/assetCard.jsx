@@ -1,7 +1,7 @@
 export function AssetCard({ asset, clickHandler, buttonText }) {
 	return (
 		<div
-			className={`card card-bordered bg-base-300 shadow-md shadow-slate-200`}
+			className={`card card-bordered bg-base-300 shadow-sm shadow-slate-200`}
 		>
 			<div className='card-body flex-row gap-4'>
 				<ul className='flex flex-col gap-4'>
@@ -12,7 +12,7 @@ export function AssetCard({ asset, clickHandler, buttonText }) {
 							<p>{asset?.asset_number ?? "999999"}</p>
 						</div>
 					</li>
-					{asset.user && (
+					{asset?.user && (
 						<li>
 							<h2 className='card-title'>Checked Out to:</h2>
 							<div className='flex'>
@@ -34,18 +34,20 @@ export function AssetCard({ asset, clickHandler, buttonText }) {
 							</div>
 						</li>
 					)}
-					<li>
-						<div className='card-actions'>
-							<button
-								className={`btn btn-primary btn-sm bg-inherit btn-outline`}
-								onClick={() => {
-									clickHandler(asset);
-								}}
-							>
-								{buttonText}
-							</button>
-						</div>
-					</li>
+					{buttonText && (
+						<li>
+							<div className='card-actions'>
+								<button
+									className={`btn btn-primary btn-sm bg-inherit btn-outline`}
+									onClick={() => {
+										clickHandler(asset);
+									}}
+								>
+									{buttonText}
+								</button>
+							</div>
+						</li>
+					)}
 				</ul>
 				<div className='divider divider-horizontal mx-0'></div>
 				<ul className='flex flex-col gap-4'>
@@ -53,14 +55,14 @@ export function AssetCard({ asset, clickHandler, buttonText }) {
 						<h2 className='card-title'>Manufacturer:</h2>
 						<div className='flex'>
 							<div className='divider divider-horizontal mx-0'></div>
-							<p>{asset?.model.manufacturer.name ?? "999999"}</p>
+							<p>{asset?.model?.manufacturer.name ?? "999999"}</p>
 						</div>
 					</li>
 					<li>
 						<h2 className='card-title'>Model:</h2>
 						<div className='flex'>
 							<div className='divider divider-horizontal mx-0'></div>
-							<p>{asset?.model.name ?? "999999"}</p>
+							<p>{asset?.model?.name ?? "999999"}</p>
 						</div>
 					</li>
 					<li>
