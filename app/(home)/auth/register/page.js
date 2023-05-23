@@ -1,2 +1,3 @@
-export default async function Page() { }
-return <>You are not registered.</>
+export default async function Page() {
+	return <>You are not registered.</>
+}
