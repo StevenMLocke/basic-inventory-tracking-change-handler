@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useState, useMemo, startTransition } from "react";
 import { useRouter } from "next/navigation";
 
-export function TransactionClientWrapper({
+export function DisposeAssetClientWrapper({
 	ids,
 	assets,
 	apiUrl,
@@ -71,24 +71,22 @@ export function TransactionClientWrapper({
 	};
 
 	const clickHandler = async (asset) => {
-		//modify asset location and status
+		//modify asset location
 		const assetData = {
 			asset: {
 				id: asset.id,
+				location_id: ids.location.id,
 				status_id: ids.status.id,
-				location_id: ids?.location?.id ?? formFields.location_id,
-				assigned_to_user_id: formFields.asset_user_id ?? null,
 			},
 		};
-		if (out) {
-			if (
-				!assetData.asset.location_id ||
-				!assetData.asset.assigned_to_user_id
-			) {
-				setError("You probably forget to select something.");
-				return;
-			}
+
+		if (!assetData.asset.id) {
+			setError("You probably forget to select something.");
+			return;
 		}
+
+		alert(JSON.stringify(assetData, null, 2));
+
 		postData(`${apiUrl}asset/edit`, assetData);
 
 		//create transaction
@@ -96,10 +94,9 @@ export function TransactionClientWrapper({
 			id: uuidv4(),
 			date: new Date().toISOString(),
 			asset_id: asset.id,
-			action_id: ids.action.id ?? formFields.action_id,
+			action_id: ids.action.id,
 			action_user_id: ids.transactor.id,
-			asset_user_id: formFields?.asset_user_id ?? null,
-			location_id: formFields?.location_id ?? ids.location.id,
+			location_id: ids.location.id,
 		};
 
 		postData(`${apiUrl}transaction/create`, transactionData).then((res) =>
@@ -186,8 +183,8 @@ export function TransactionClientWrapper({
 									{assets.length} assets currently {assetState}.
 								</h3>
 							</div>
-							<pre>{JSON.stringify(filteredAssets, null, 2)}</pre>
-							<pre>{JSON.stringify(formFields, null, 2)}</pre>
+							{/* 							<pre>{JSON.stringify(filteredAssets, null, 2)}</pre>
+							<pre>{JSON.stringify(formFields, null, 2)}</pre> */}
 						</div>
 					</div>
 				</div>

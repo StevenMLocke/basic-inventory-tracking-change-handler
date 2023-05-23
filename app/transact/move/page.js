@@ -1,13 +1,13 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { redirect } from "next/navigation"
-import { TransactionClientWrapper } from './../components/tClientWrapper'
+import { MoveAssetClientWrapper } from './../components/moveAssetClientWrapper'
 import prisma from "@/lib/db"
 
 export default async function Page() {
 	const session = await getServerSession(authOptions)
 	if (!session) {
-		redirect('/api/auth/signin?callbackUrl=/transact/checkout')
+		redirect('/api/auth/signin?callbackUrl=/transact/checkin')
 	}
 
 	const apiUrl = process.env.API;
@@ -15,29 +15,17 @@ export default async function Page() {
 	const actions = await prisma.action.findMany()
 	const locations = await prisma.location.findMany({
 		where: {
-			OR: [
-				{ name: "Checked out to student" },
-				{ name: "Checked out to staff" },
-			]
+			NOT: {
+				OR: [
+					{ name: "Destroyed forever" },
+					{ name: "Checked out to staff" },
+					{ name: "Checked out to student" },
+				]
+			}
 		}
 	})
 	const statuses = await prisma.status.findMany()
-	const users = await prisma.user.findMany({
-		select: {
-			id: true,
-			fn: true,
-			ln: true,
-			full_name: true,
-			email: true,
-			role: true,
-			authorized_bitch_user: true,
-		},
-		orderBy: {
-			ln: 'asc'
-		}
-	})
-
-	const [{ id }] = statuses.filter(status => { return status.name === "Checked In" })
+	const [{ id }] = statuses.filter(status => { return status.name === "Checked Out" })
 
 	const assets = await prisma.asset.findMany({
 		select: {
@@ -63,19 +51,29 @@ export default async function Page() {
 			},
 		},
 		where: {
-			status_id: id
+			NOT: {
+				status_id: id
+			}
+		},
+		orderBy: {
+			asset_number: "asc"
 		}
 	})
 
 	const ids = {
 		status: {
 			id: statuses.filter((status) => {
-				return status.name === "Checked Out";
+				return status.name === "Checked In";
 			})[0].id
 		},
 		action: {
 			id: actions.filter((action) => {
-				return action.type === "check out";
+				return action.type === "move";
+			})[0].id
+		},
+		location: {
+			id: locations.filter((location) => {
+				return location.name === "In stock";
 			})[0].id
 		},
 		transactor: { id: session.user.id },
@@ -91,44 +89,31 @@ export default async function Page() {
 
 	const selectFields = [
 		{
-			id: 'asset_user_id',
-			type: 'user',
-			required: false,
-			data: users.map(user => {
-				return {
-					id: user.id,
-					name: user.full_name
-				}
-			})
-		},
-		{
 			id: 'location_id',
 			type: 'location',
-			required: false,
-			data: locations.map(location => {
+			data: locations?.map((location) => {
 				return {
 					id: location.id,
 					name: location.name
 				}
 			})
-		},
-	];
+		}
+	]
 
-	return (session?.user.role === "admin" || session?.user.role === "transactor" || session.user.role === "asset manager") ?
+	return (session?.user.role === "admin" || session.user.role === "asset manager") ?
 		<>
-			<TransactionClientWrapper
+			<MoveAssetClientWrapper
 				ids={ids}
 				assets={assets}
 				apiUrl={apiUrl}
-				textFieldsArray={textFields}
 				selectArray={selectFields}
-				action={`checked out`}
-				heroText={`Asset Check Out`}
-				assetCardButtonText={'Check Out'}
-				assetState={`available to checkout`}
-				out={true}
+				textFieldsArray={textFields}
+				action={`moved`}
+				assetCardButtonText={`move`}
+				heroText={`Move Asset`}
+				assetState={"available to move"}
 			>
-			</TransactionClientWrapper>
+			</MoveAssetClientWrapper>
 		</> :
 		redirect('/')
 }

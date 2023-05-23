@@ -22,7 +22,7 @@ module.exports = {
 	],
 	daisyui: {
 		styled: true,
-		themes: ["dark", "bumblebee", "emerald", "corporate", "cyberpunk", "valentine", "halloween", "aqua", "lofi", "wireframe", "black", "luxury", "autumn", "night", "winter"],
+		themes: ["dark", "valentine", "halloween", "aqua", "luxury", "autumn", "winter"],
 		base: true,
 		utils: true,
 		logs: true,

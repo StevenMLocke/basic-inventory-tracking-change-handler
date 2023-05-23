@@ -1,5 +1,4 @@
 "use client";
-import { AssetCard } from "./assetCard";
 import SectionHero from "@/components/sectionHero";
 import { ErrorAlert, InfoAlert } from "./../../manage/components/mgmtAlerts";
 import {
@@ -11,30 +10,18 @@ import { v4 as uuidv4 } from "uuid";
 import { useState, useMemo, startTransition } from "react";
 import { useRouter } from "next/navigation";
 
-export function TransactionClientWrapper({
+export function CreateAssetClientWrapper({
 	ids,
-	assets,
 	apiUrl,
 	textFieldsArray,
 	selectArray,
 	heroText,
-	action,
-	assetCardButtonText,
-	assetState,
-	out,
 }) {
 	const router = useRouter();
 
-	const [query, setQuery] = useState("");
 	const [error, setError] = useState();
 	const [info, setInfo] = useState();
 	const [formFields, setFormFields] = useState({});
-
-	const filteredAssets = useMemo(() => {
-		return assets.filter((asset) => {
-			return asset.asset_number.includes(query);
-		});
-	}, [query, assets]);
 
 	const postData = async function (url, data) {
 		const res = await fetch(url, {
@@ -46,21 +33,9 @@ export function TransactionClientWrapper({
 		return res.json();
 	};
 
-	const inputOnChange = (e) => {
-		setQuery(e.target.value);
-	};
-
-	const formSubmit = (e) => {
-		e.preventDefault();
-	};
-
 	const dismissHandler = () => {
 		setError();
 		setInfo();
-		setQuery("");
-		startTransition(() => {
-			router.refresh();
-		});
 	};
 
 	const fieldChangeHandler = (e) => {
@@ -70,43 +45,42 @@ export function TransactionClientWrapper({
 		setFormFields(fieldsCopy);
 	};
 
-	const clickHandler = async (asset) => {
-		//modify asset location and status
-		const assetData = {
+	const submitHandler = async (e) => {
+		e.preventDefault();
+		//attempt to create asset
+		const data = {
 			asset: {
-				id: asset.id,
+				id: uuidv4(),
+				location_id: ids.location.id,
 				status_id: ids.status.id,
-				location_id: ids?.location?.id ?? formFields.location_id,
-				assigned_to_user_id: formFields.asset_user_id ?? null,
+				...formFields,
 			},
 		};
-		if (out) {
-			if (
-				!assetData.asset.location_id ||
-				!assetData.asset.assigned_to_user_id
-			) {
-				setError("You probably forget to select something.");
-				return;
-			}
+		//create and log transaction
+		const createdAsset = await postData(`${apiUrl}asset/create`, data);
+		if (createdAsset) {
+			console.log("created");
+
+			const transaction = {
+				id: uuidv4(),
+				date: new Date().toISOString(),
+				asset_id: data.asset.id,
+				action_id: ids.action.id,
+				action_user_id: ids.transactor.id,
+				location_id: ids.location.id,
+			};
+			await postData(`${apiUrl}transaction/create`, transaction);
+		} else {
+			setError("Something went rongk");
 		}
-		postData(`${apiUrl}asset/edit`, assetData);
-
-		//create transaction
-		const transactionData = {
-			id: uuidv4(),
-			date: new Date().toISOString(),
-			asset_id: asset.id,
-			action_id: ids.action.id ?? formFields.action_id,
-			action_user_id: ids.transactor.id,
-			asset_user_id: formFields?.asset_user_id ?? null,
-			location_id: formFields?.location_id ?? ids.location.id,
-		};
-
-		postData(`${apiUrl}transaction/create`, transactionData).then((res) =>
-			setInfo(`Asset #${asset.asset_number} ${action}.`)
-		);
 
 		setFormFields({});
+
+		setInfo(`Asset ${data.asset.asset_number} created!`);
+
+		startTransition(() => {
+			router.refresh();
+		});
 	};
 
 	function formInputs(textFieldsArray, selectArray, disabledValue) {
@@ -118,12 +92,9 @@ export function TransactionClientWrapper({
 							key={item.name}
 							id={item.id}
 							placeholderText={`Choose ${item.name}...`}
-							changeHandler={(e) => {
-								inputOnChange(e);
-								fieldChangeHandler(e);
-							}}
-							value={query}
+							changeHandler={fieldChangeHandler}
 							disabledValue={disabledValue}
+							value={formFields[item.id] ?? ""}
 							inputType={item.inputType}
 							required={item.required ?? true}
 						></MgmtFormTextInput>
@@ -167,27 +138,14 @@ export function TransactionClientWrapper({
 					<div className='flex flex-1 '>
 						<div className='flex flex-col flex-1 justify-between'>
 							<MgmtForm
-								includeButton={false}
-								buttonClickHandler={formSubmit}
+								buttonText={"Create"}
+								buttonClickHandler={submitHandler}
 							>
-								<h2 className='prose-xl font-semibold'>Asset Number Search</h2>
+								<h2 className='prose-xl font-semibold'>Create New Asset</h2>
 								{formInputs(textFieldsArray, selectArray, false)}
-
-								{filteredAssets.length === 1 && query && (
-									<AssetCard
-										asset={filteredAssets[0]}
-										clickHandler={clickHandler}
-										buttonText={assetCardButtonText}
-									></AssetCard>
-								)}
 							</MgmtForm>
-							<div className='flex justify-center items-center '>
-								<h3>
-									{assets.length} assets currently {assetState}.
-								</h3>
-							</div>
-							<pre>{JSON.stringify(filteredAssets, null, 2)}</pre>
-							<pre>{JSON.stringify(formFields, null, 2)}</pre>
+							<div className='flex justify-center items-center '></div>
+							<pre>{JSON.stringify("poo", null, 2)}</pre>
 						</div>
 					</div>
 				</div>

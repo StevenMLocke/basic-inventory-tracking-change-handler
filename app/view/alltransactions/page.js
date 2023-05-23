@@ -1,16 +1,15 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { redirect } from "next/navigation"
-import { TransactionTable } from './../../transact/components/transactionsTable'
 import SectionHero from "@/components/sectionHero"
+import { ReadTable } from '@/components/readTable'
+import { Suspense } from "react"
 
 export default async function Page() {
 	const session = await getServerSession(authOptions)
 	if (!session) {
 		redirect('/api/auth/signin?callbackUrl=/transact/checkin')
 	}
-
-	const apiUrl = process.env.API;
 
 	const transactions = await prisma.transaction.findMany({
 		select: {
@@ -28,7 +27,7 @@ export default async function Page() {
 							}
 						}
 					},
-					serial_number: true
+					serial_number: true,
 				}
 			},
 			action: {
@@ -48,19 +47,44 @@ export default async function Page() {
 					email: true
 				}
 			},
+			location: {
+				select: {
+					name: true
+				}
+			}
 		},
 		orderBy: {
 			date: 'desc'
 		}
 	})
 
+	const data = transactions.map(transaction => {
+		const dateToString = (transaction) => {
+			const dateObj = new Date(transaction.date);
+			return dateObj.toLocaleDateString("en-us", {
+				year: "numeric",
+				month: "short",
+				day: "numeric",
+			});
+		}
+
+		return ({
+			date: dateToString(transaction),
+			action: transaction.action.type,
+			asset: transaction.asset,
+			asset_user: transaction?.user_transaction_asset_user_idTouser,
+			transactor: transaction?.user_transaction_action_user_idTouser?.full_name,
+			location: transaction?.location?.name
+		})
+	})
+
 	return (
-		<div className='flex flex-col w-full'>
-			<div className='flex flex-col flex-1 min-w-full items-center'>
-				<SectionHero title={`Transactions`}></SectionHero>
-				<TransactionTable dataData={transactions}></TransactionTable>
-				{/* 		<pre>{JSON.stringify(transactions[2], null, 2)}</pre> */}
-			</div>
+		<div className='flex flex-col min-w-full items-center'>
+			<SectionHero title={`Transactions`}></SectionHero>
+			<Suspense fallback={<p>Suspenseful!!!</p>}>
+				<ReadTable dataData={data}></ReadTable>
+			</Suspense>
+			{/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
 		</div>
 	)
 }

@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { redirect } from "next/navigation"
-import { TransactionClientWrapper } from './../components/tClientWrapper'
+import { DisposeAssetClientWrapper } from '../components/disposeAssetClientWrapper'
 import prisma from "@/lib/db"
 
 export default async function Page() {
@@ -13,11 +13,23 @@ export default async function Page() {
 	const apiUrl = process.env.API;
 
 	const actions = await prisma.action.findMany()
-	const locations = await prisma.location.findMany()
+	const locations = await prisma.location.findMany({
+		where: {
+			NOT: {
+				OR: [
+					{ name: "Checked out to staff" },
+					{ name: "Checked out to student" },
+				]
+			}
+		}
+	})
 	const statuses = await prisma.status.findMany()
+	const filteredStatusIds = statuses.filter(status => {
+		return status.name === "Disposed" ||
+			status.name === "Checked Out"
+	})
 
-	const [{ id }] = statuses.filter(status => { return status.name === "Checked Out" })
-
+	//get assets that are NOT already disposed
 	const assets = await prisma.asset.findMany({
 		select: {
 			id: true,
@@ -42,24 +54,32 @@ export default async function Page() {
 			},
 		},
 		where: {
-			status_id: id
+			NOT: {
+				OR: [
+					{ status_id: filteredStatusIds[0].id },
+					{ status_id: filteredStatusIds[1].id }
+				]
+			}
+		},
+		orderBy: {
+			asset_number: "asc"
 		}
 	})
 
 	const ids = {
 		status: {
 			id: statuses.filter((status) => {
-				return status.name === "Checked In";
+				return status.name === "Disposed";
 			})[0].id
 		},
 		action: {
 			id: actions.filter((action) => {
-				return action.type === "check in";
+				return action.type === "destroy";
 			})[0].id
 		},
 		location: {
 			id: locations.filter((location) => {
-				return location.name === "In stock";
+				return location.name === "Destroyed forever";
 			})[0].id
 		},
 		transactor: { id: session.user.id },
@@ -73,19 +93,19 @@ export default async function Page() {
 		},
 	]
 
-	return (session?.user.role === "admin" || session?.user.role === "transactor" || session.user.role === "asset manager") ?
+	return (session?.user.role === "admin") ?
 		<>
-			<TransactionClientWrapper
+			<DisposeAssetClientWrapper
 				ids={ids}
 				assets={assets}
 				apiUrl={apiUrl}
 				textFieldsArray={textFields}
-				action={`checked in`}
-				assetCardButtonText={`Check In`}
-				heroText={`Asset Check In`}
-				assetState={`checked out`}
+				action={`disposed`}
+				assetCardButtonText={`Dispose`}
+				heroText={`Dispose Asset`}
+				assetState={"available to dispose"}
 			>
-			</TransactionClientWrapper>
+			</DisposeAssetClientWrapper>
 		</> :
 		redirect('/')
 }

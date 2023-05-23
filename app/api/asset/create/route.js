@@ -25,7 +25,14 @@ export async function POST(req) {
 		})
 		asset.status_id = status.id
 	}
-	const createdAsset = await prisma.asset.create({ data: asset, })
 
+	let createdAsset
+	try {
+		createdAsset = await prisma.asset.create({ data: asset, })
+
+	} catch (e) {
+
+		throw e
+	}
 	return NextResponse.json(createdAsset)
 }

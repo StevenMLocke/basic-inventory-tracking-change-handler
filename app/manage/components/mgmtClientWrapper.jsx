@@ -1,11 +1,12 @@
 "use client";
 import { useMemo, useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import SectionHero from "@/components/sectionHero";
 import MgmtTabs from "./mgmtTabs";
 import { MgmtForm, MgmtFormTextInput, MgmtDropdown } from "./mgmtForm";
 import { Table } from "./mgmtTable";
+import { Suspense } from "react";
 
 import { ErrorAlert, InfoAlert } from "./mgmtAlerts";
 
@@ -26,7 +27,7 @@ export default function ClientWrapper({
 	const memoTableColumns = useMemo(() => tableColumns, [tableColumns]);
 
 	const [isPending, startTransition] = useTransition();
-	const [selected, setSelected] = useState(1);
+	const [selected, setSelected] = useState(-1);
 	const [formFields, setFormFields] = useState({});
 	const [activeRowId, setActiveRowId] = useState(null);
 	const [error, setError] = useState(false);
@@ -81,13 +82,16 @@ export default function ClientWrapper({
 		const data = {};
 		data[itemName.toLowerCase()] = { ...formFields, id: uuidv4() };
 
-		await postData(`${apiUrl}create`, data).then((json) => {
-			setInfo(`${itemName} created!`);
-			setFormFields({});
-			setActiveRowId(json.id);
-		});
+		const returnedItem = await postData(`${apiUrl}create`, data).then(
+			(json) => {
+				setInfo(`${itemName} created!`);
+				setFormFields({});
+				setActiveRowId(json.id);
+			}
+		);
 
 		startTransition(() => {
+			console.log(returnedItem);
 			router.refresh();
 		});
 	};
@@ -206,51 +210,57 @@ export default function ClientWrapper({
 						role={session.user.role}
 						clickHandler={tabClickHandler}
 						selectedTabNum={selected}
+						createEnabled={usePathname() == "/manage/asset" ? false : true}
 					></MgmtTabs>
-					<div className='tabs-content flex flex-col items-center w-full'>
-						{selected == 1 && (
-							<MgmtForm
-								buttonClickHandler={createHandler}
-								buttonText={"Create"}
-							>
-								{(inputSelectArr || inputTextArr) &&
-									formInputs(inputTextArr, inputSelectArr, false)}
-							</MgmtForm>
-						)}
-						{selected == 2 && (
-							<MgmtForm
-								buttonClickHandler={editHandler}
-								buttonText={"Edit"}
-							>
-								{(inputSelectArr || inputTextArr) &&
-									formInputs(inputTextArr, inputSelectArr, false)}
-							</MgmtForm>
-						)}
-						{selected == 3 && (
-							<MgmtForm
-								buttonClickHandler={removeHandler}
-								buttonText={"remove"}
-							>
-								{(inputSelectArr || inputTextArr) &&
-									formInputs(inputTextArr, inputSelectArr, true)}
-							</MgmtForm>
-						)}
-					</div>
+					<Suspense fallback={<p>Forms are loading, I suppose.</p>}>
+						<div className='tabs-content flex flex-col items-center w-full'>
+							{selected == 1 && (
+								<MgmtForm
+									buttonClickHandler={createHandler}
+									buttonText={"Create"}
+								>
+									{(inputSelectArr || inputTextArr) &&
+										formInputs(inputTextArr, inputSelectArr, false)}
+								</MgmtForm>
+							)}
+							{selected == 2 && (
+								<MgmtForm
+									buttonClickHandler={editHandler}
+									buttonText={"Edit"}
+								>
+									{(inputSelectArr || inputTextArr) &&
+										formInputs(inputTextArr, inputSelectArr, false)}
+								</MgmtForm>
+							)}
+							{selected == 3 && (
+								<MgmtForm
+									buttonClickHandler={removeHandler}
+									buttonText={"remove"}
+								>
+									{(inputSelectArr || inputTextArr) &&
+										formInputs(inputTextArr, inputSelectArr, true)}
+								</MgmtForm>
+							)}
+						</div>
+					</Suspense>
 				</div>
 				<div className='divider divider-horizontal h-[90%] my-auto'></div>
-				{memoTableData && memoTableData.length !== 0 && (
-					<Table
-						tableData={memoTableData}
-						tableColumns={memoTableColumns}
-						selectHandler={tableRowSelectHandler}
-						selectedTab={selected}
-						activeRowId={activeRowId}
-						options={tableOptions}
-					></Table>
-				)}
+				<Suspense fallback={<p>Table is loading, I suppose</p>}>
+					{memoTableData && memoTableData.length !== 0 && (
+						<Table
+							tableData={memoTableData}
+							tableColumns={memoTableColumns}
+							selectHandler={tableRowSelectHandler}
+							selectedTab={selected}
+							activeRowId={activeRowId}
+							options={tableOptions}
+						></Table>
+					)}
+				</Suspense>
 			</div>
-			{/* 			<pre>{JSON.stringify(formFields, null, 2)}</pre> */}
+			<pre>{JSON.stringify(formFields, null, 2)}</pre>
 			{/* 			<pre>{JSON.stringify(session, null, 2)}</pre> */}
+			<pre>{JSON.stringify(usePathname(), null, 2)}</pre>
 			{children}
 		</div>
 	);

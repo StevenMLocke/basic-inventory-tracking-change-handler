@@ -1,15 +1,22 @@
-export default function MgmtTabs({ clickHandler, selectedTabNum, role }) {
+export default function MgmtTabs({
+	clickHandler,
+	selectedTabNum,
+	role,
+	createEnabled = true,
+}) {
 	return (
 		<div className='tabs flex justify-center min-w-full'>
-			<a
-				data-num={1}
-				className={`tab tab-bordered flex-1 ${
-					selectedTabNum == 1 && "tab-active tab-lifted tab-border-2 "
-				}`}
-				onClick={clickHandler}
-			>
-				Create
-			</a>
+			{createEnabled && (
+				<a
+					data-num={1}
+					className={`tab tab-bordered flex-1 ${
+						selectedTabNum == 1 && "tab-active tab-lifted tab-border-2 "
+					}`}
+					onClick={clickHandler}
+				>
+					Create
+				</a>
+			)}
 			<a
 				data-num={2}
 				className={`tab tab-bordered flex-1 ${

@@ -9,7 +9,6 @@ import {
 } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import { Flipped, Flipper } from "react-flip-toolkit";
-import { AssetCard } from "./assetCard";
 import { TransactionCard } from "./transactionCard";
 
 export function TransactionTable({ dataData }) {

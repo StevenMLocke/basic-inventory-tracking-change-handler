@@ -4,7 +4,7 @@ import { UserCard } from "@/components/userCard";
 
 export default async function SideBar({ session }) {
 	return (
-		<aside className='2xl:w-1/6 border-r-2 border-slate-400 flex flex-col gap-2 p-4 bg-base-300'>
+		<aside className='2xl:w-1/6 border-r-2 border-neutral-500 flex flex-col gap-2 p-4 bg-base-300'>
 			{session && (
 				<UserCard
 					email={session.user.email}
@@ -12,8 +12,8 @@ export default async function SideBar({ session }) {
 					picUrl={session.user.image}
 				></UserCard>
 			)}
-			<div className='flex flex-col flex-1 justify-between'>
-				<div className='flex flex-col border-t-slate-400 border-t-2'>
+			<div className='flex flex-col flex-1 justify-between overflow-y-auto'>
+				<div className='flex flex-col border-t-neutral-500 border-t-2'>
 					{(session.user.role === "admin" ||
 						session.user.role === "transactor" ||
 						session.user.role === "viewer" ||
@@ -23,45 +23,36 @@ export default async function SideBar({ session }) {
 								<li>
 									<Link href={"/view/alltransactions"}>All Transactions</Link>
 								</li>
-								<li>
-									<Link href={"/view/"}>Transaction by User</Link>
-								</li>
-								<li>
-									<Link href={"/view/"}>Transaction by Asset User</Link>
-								</li>
-								<li>
-									<Link href={"/view/"}>Transaction by Date</Link>
-								</li>
-								<li>
-									<Link href={"/view/"}>Transaction by Asset Number</Link>
-								</li>
 							</ul>
 						</Accordion>
 					)}
 					{(session.user.role === "admin" ||
 						session.user.role === "transactor" ||
-						session.user.role === "viewer" ||
 						session.user.role === "asset manager") && (
 						<Accordion title={"Transact"}>
 							<ul className='menu menu-compact flex-1 flex-nowrap'>
-								{session.user.role !== "viewer" && (
-									<>
+								<>
+									<li>
+										<Link href={"/transact/checkin"}>Check In</Link>
+									</li>
+									<li>
+										<Link href={"/transact/checkout"}>Check Out</Link>
+									</li>
+									<li>
+										<Link href={"/transact/move"}>Move</Link>
+									</li>
+									{(session.user.role === "admin" ||
+										session.user.role === "asset manager") && (
 										<li>
-											<Link href={"/transact/checkin"}>Check In</Link>
+											<Link href={"/transact/create"}>Create</Link>
 										</li>
+									)}
+									{session.user.role === "admin" && (
 										<li>
-											<Link href={"/transact/checkout"}>Check Out</Link>
+											<Link href={"/transact/dispose"}>Destroy/Dispose</Link>
 										</li>
-										<li>
-											<Link href={"#"}>Move</Link>
-										</li>
-										{session.user.role === "admin" && (
-											<li>
-												<Link href={"/transact/"}>Destroy/Dispose</Link>
-											</li>
-										)}
-									</>
-								)}
+									)}
+								</>
 							</ul>
 						</Accordion>
 					)}

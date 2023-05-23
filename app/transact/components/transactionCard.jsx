@@ -1,4 +1,11 @@
-export function TransactionCard({ action, rowDate, asset, user, transactor }) {
+export function TransactionCard({
+	action,
+	rowDate,
+	asset,
+	user,
+	transactor,
+	location,
+}) {
 	return (
 		<div
 			className={`card card-bordered bg-base-300 shadow-sm shadow-slate-200`}
@@ -50,6 +57,11 @@ export function TransactionCard({ action, rowDate, asset, user, transactor }) {
 													</li>
 												</ul>
 											</div>
+										</li>
+									)}
+									{location && (
+										<li>
+											Location: <span className='prose-base'>{location}</span>
 										</li>
 									)}
 								</ul>

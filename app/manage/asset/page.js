@@ -1,9 +1,9 @@
-//import { getData } from "@/lib/helpers"
 import ClientWrapper from './../components/mgmtClientWrapper'
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/db";
+import { Suspense } from 'react';
 
 export default async function Page() {
 	const session = await getServerSession(authOptions)
