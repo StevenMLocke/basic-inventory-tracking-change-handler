@@ -85,8 +85,6 @@ export function DisposeAssetClientWrapper({
 			return;
 		}
 
-		alert(JSON.stringify(assetData, null, 2));
-
 		postData(`${apiUrl}asset/edit`, assetData);
 
 		//create transaction

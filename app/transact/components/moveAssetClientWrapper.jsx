@@ -180,8 +180,8 @@ export function MoveAssetClientWrapper({
 									{assets.length} assets currently {assetState}.
 								</h3>
 							</div>
-							<pre>{JSON.stringify(filteredAssets, null, 2)}</pre>
-							<pre>{JSON.stringify(formFields, null, 2)}</pre>
+							{/* 							<pre>{JSON.stringify(filteredAssets, null, 2)}</pre>
+							<pre>{JSON.stringify(formFields, null, 2)}</pre> */}
 						</div>
 					</div>
 				</div>

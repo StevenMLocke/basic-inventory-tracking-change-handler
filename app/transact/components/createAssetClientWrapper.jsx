@@ -145,7 +145,7 @@ export function CreateAssetClientWrapper({
 								{formInputs(textFieldsArray, selectArray, false)}
 							</MgmtForm>
 							<div className='flex justify-center items-center '></div>
-							<pre>{JSON.stringify("poo", null, 2)}</pre>
+							{/* 							<pre>{JSON.stringify("poo", null, 2)}</pre> */}
 						</div>
 					</div>
 				</div>
