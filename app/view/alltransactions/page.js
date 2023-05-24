@@ -2,8 +2,9 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { redirect } from "next/navigation"
 import SectionHero from "@/components/sectionHero"
-import { ReadTable } from '@/components/readTable'
+import { ViewTable } from './../components/viewTable'
 import { Suspense } from "react"
+import prisma from '@/lib/db'
 
 export default async function Page() {
 	const session = await getServerSession(authOptions)
@@ -82,7 +83,7 @@ export default async function Page() {
 		<div className='flex flex-col min-w-full items-center'>
 			<SectionHero title={`Transactions`}></SectionHero>
 			<Suspense fallback={<p>Suspenseful!!!</p>}>
-				<ReadTable dataData={data}></ReadTable>
+				<ViewTable dataData={data}></ViewTable>
 			</Suspense>
 		</div>
 	)

@@ -4,7 +4,7 @@ import { SignOutButton } from "./logButtons";
 import { useState } from "react";
 import { Flipper, Flipped } from "react-flip-toolkit";
 
-export function UserCard({ name, email, picUrl }) {
+export function UserCard({ name, email, picUrl, role }) {
 	const [opened, setOpened] = useState(false);
 	return (
 		<Flipper
@@ -44,6 +44,7 @@ export function UserCard({ name, email, picUrl }) {
 						>
 							<h2 className={`card-title`}>{name}</h2>
 							<p className={``}>{email}</p>
+							<p>{role}</p>
 							<div className='card-actions justify-end'>
 								<SignOutButton
 									className='btn-xs'

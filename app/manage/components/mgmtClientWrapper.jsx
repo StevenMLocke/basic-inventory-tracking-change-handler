@@ -258,9 +258,9 @@ export default function ClientWrapper({
 					)}
 				</Suspense>
 			</div>
-			<pre>{JSON.stringify(formFields, null, 2)}</pre>
+			{/* <pre>{JSON.stringify(formFields, null, 2)}</pre> */}
 			{/* 			<pre>{JSON.stringify(session, null, 2)}</pre> */}
-			<pre>{JSON.stringify(usePathname(), null, 2)}</pre>
+			{/* <pre>{JSON.stringify(usePathname(), null, 2)}</pre> */}
 			{children}
 		</div>
 	);

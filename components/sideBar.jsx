@@ -10,6 +10,7 @@ export default async function SideBar({ session }) {
 					email={session.user.email}
 					name={session.user.name}
 					picUrl={session.user.image}
+					role={session.user.role}
 				></UserCard>
 			)}
 			<div className='flex flex-col flex-1 justify-between overflow-y-auto'>

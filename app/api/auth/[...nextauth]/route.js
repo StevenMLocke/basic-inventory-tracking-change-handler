@@ -46,7 +46,7 @@ export const authOptions = {
 				role_id: role.id
 			}
 			const newUser = await prisma.user.create({ data: registeringUser })
-			return '/auth/register'
+			return '/auth/registered'
 		},
 		async jwt({ token }) {
 			token.role = null

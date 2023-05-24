@@ -1,8 +1,8 @@
 "use client";
-import { useTable, useSortBy, useFilters } from "react-table";
+import { useTable, useSortBy, useFilters, useFlexLayout } from "react-table";
 import { useMemo, useState } from "react";
 import { Flipped, Flipper } from "react-flip-toolkit";
-import { TransactionCard } from "./../app/transact/components/transactionCard";
+import { TransactionCard } from "./../../transact/components/transactionCard";
 
 //https://codesandbox.io/s/github/tannerlinsley/react-table/tree/v7/examples/filtering?file=/src/App.js:629-1348
 function SelectColumnFilter({
@@ -15,13 +15,21 @@ function SelectColumnFilter({
 		preFilteredRows.forEach((row) => {
 			options.add(row.values[id]);
 		});
-		return [...options.values()];
+		return [...options.values()].sort((a, b) => {
+			if (a * 1 > b * 1) {
+				return 1;
+			}
+			if (a * 1 < b * 1) {
+				return -1;
+			}
+			return 0;
+		});
 	}, [id, preFilteredRows]);
 
 	// Render a multi-select box
 	return (
 		<select
-			className='select select-bordered select-sm max-w-xs form-control m-2 w-fit'
+			className='select select-bordered select-sm max-w-[7rem] form-control my-2 '
 			value={filterValue}
 			onChange={(e) => {
 				setFilter(e.target.value || undefined);
@@ -40,7 +48,7 @@ function SelectColumnFilter({
 	);
 }
 
-export function ReadTable({ dataData }) {
+export function ViewTable({ dataData }) {
 	const [rowData, setRowData] = useState(null);
 	const [activeRowInd, setActiveRowInd] = useState(-1);
 
@@ -80,7 +88,7 @@ export function ReadTable({ dataData }) {
 				Header: "Asset User",
 				accessor: "asset_user.email",
 				Filter: SelectColumnFilter,
-				filter: "includes",
+				filter: "equals",
 			},
 			{
 				Header: "Transactor",
