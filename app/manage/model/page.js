@@ -1,4 +1,3 @@
-//import { getData } from "@/lib/helpers";
 import ClientWrapper from "./../components/mgmtClientWrapper";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -13,10 +12,6 @@ export default async function Page() {
 
 	const apiUrl = process.env.API;
 	const itemName = "Model";
-	/* 	const modelsData = getData(`${apiUrl}${itemName.toLowerCase()}/get/${itemName.toLowerCase()}s`);
-		const manufacturersData = getData(`${apiUrl}manufacturer/get/manufacturers`, { next: { revalidate: 100 } })
-	
-		const [models, manufacturers] = await Promise.all([modelsData, manufacturersData]); */
 
 	const models = await prisma.model.findMany({
 		select: {

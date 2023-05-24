@@ -1,4 +1,3 @@
-//import { getData } from "@/lib/helpers";
 import ClientWrapper from "./../components/mgmtClientWrapper";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -13,10 +12,6 @@ export default async function Page() {
 
 	const apiUrl = process.env.API;
 	const itemName = "Location";
-
-	/* 	const locations = await getData(
-			`${apiUrl}${itemName.toLowerCase()}/get/${itemName.toLowerCase()}s`
-		); */
 
 	const locations = await prisma.location.findMany()
 

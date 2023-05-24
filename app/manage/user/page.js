@@ -1,4 +1,3 @@
-//import { getData } from "@/lib/helpers";
 import ClientWrapper from "./../components/mgmtClientWrapper"
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -14,11 +13,6 @@ export default async function Page(req) {
 	const role = session?.user.role
 	const apiUrl = process.env.API;
 	const itemName = "User";
-
-	/* 	const usersData = getData(`${apiUrl}${itemName.toLowerCase()}/get/${itemName.toLowerCase()}s`);
-		const rolesData = getData(`${apiUrl}/role/get/roles`, { next: { revalidate: 100 } })
-	
-		const [users, roles] = await Promise.all([usersData, rolesData]); */
 
 	const roles = await prisma.role.findMany()
 	const users = await prisma.user.findMany({
