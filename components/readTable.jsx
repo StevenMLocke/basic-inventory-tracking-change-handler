@@ -40,7 +40,7 @@ function SelectColumnFilter({
 	);
 }
 
-export function ReadTable({ columnsData, dataData }) {
+export function ReadTable({ dataData }) {
 	const [rowData, setRowData] = useState(null);
 	const [activeRowInd, setActiveRowInd] = useState(-1);
 

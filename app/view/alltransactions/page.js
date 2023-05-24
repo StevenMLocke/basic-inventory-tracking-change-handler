@@ -8,7 +8,7 @@ import { Suspense } from "react"
 export default async function Page() {
 	const session = await getServerSession(authOptions)
 	if (!session) {
-		redirect('/api/auth/signin?callbackUrl=/transact/checkin')
+		redirect('/api/auth/signin?callbackUrl=/view/alltransactions')
 	}
 
 	const transactions = await prisma.transaction.findMany({
@@ -84,7 +84,6 @@ export default async function Page() {
 			<Suspense fallback={<p>Suspenseful!!!</p>}>
 				<ReadTable dataData={data}></ReadTable>
 			</Suspense>
-			{/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
 		</div>
 	)
 }

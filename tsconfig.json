@@ -37,7 +37,8 @@
 		"app/admin/modify/users/api/route.js",
 		"lib/db.js",
 		"app/api/user/edit/route.js",
-		"app/api/auth/[...nextauth]/route.js"
+		"app/api/auth/[...nextauth]/route.js",
+		"middleware.ts.bak"
 	],
 	"exclude": [
 		"node_modules"

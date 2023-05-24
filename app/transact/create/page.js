@@ -7,7 +7,7 @@ import { CreateAssetClientWrapper } from './../components/createAssetClientWrapp
 export default async function Page() {
 	const session = await getServerSession(authOptions)
 	if (!session) {
-		redirect('/api/auth/signin?callbackUrl=/transact/checkin')
+		redirect('/api/auth/signin?callbackUrl=/transact/create')
 	}
 
 	const apiUrl = process.env.API;

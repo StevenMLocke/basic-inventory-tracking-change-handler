@@ -7,7 +7,7 @@ import prisma from "@/lib/db"
 export default async function Page() {
 	const session = await getServerSession(authOptions)
 	if (!session) {
-		redirect('/api/auth/signin?callbackUrl=/transact/checkin')
+		redirect('/api/auth/signin?callbackUrl=/transact/dispose')
 	}
 
 	const apiUrl = process.env.API;
