@@ -1,6 +1,7 @@
-//import { PrismaClient } from '@prisma/client'
 import prisma from '@/lib/db'
 import { NextResponse } from 'next/server'
+
+export const revalidate = 0
 export async function GET() {
 	const users = await prisma.user.findMany({
 		select: {
