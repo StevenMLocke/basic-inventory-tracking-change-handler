@@ -14,23 +14,27 @@ model action {
 }
 
 model asset {
-  id                  String        @id @unique(map: "id_UNIQUE") @db.VarChar(38)
-  asset_number        String        @unique(map: "asset_number_UNIQUE") @db.VarChar(45)
-  model_id            String?       @db.VarChar(38)
-  serial_number       String        @unique(map: "serial_number_UNIQUE") @db.VarChar(64)
-  assigned_to_user_id String?       @db.VarChar(38)
-  status_id           String?       @db.VarChar(38)
-  location_id         String?       @db.VarChar(38)
-  user                user?         @relation(fields: [assigned_to_user_id], references: [id], map: "fk_user_id")
-  location            location?     @relation(fields: [location_id], references: [id], map: "fk_location_id_asset")
-  model               model?        @relation(fields: [model_id], references: [id], map: "fk_model_id")
-  status              status?       @relation(fields: [status_id], references: [id], map: "fk_status_id_asset")
+  id                  String          @id @unique(map: "id_UNIQUE") @db.VarChar(38)
+  asset_number        String          @unique(map: "asset_number_UNIQUE") @db.VarChar(45)
+  model_id            String?         @db.VarChar(38)
+  serial_number       String          @unique(map: "serial_number_UNIQUE") @db.VarChar(64)
+  assigned_to_user_id String?         @db.VarChar(38)
+  status_id           String?         @db.VarChar(38)
+  location_id         String?         @db.VarChar(38)
+  funding_source_id   String?         @db.VarChar(38)
+  purchase_date       DateTime?       @db.Date
+  funding_source      funding_source? @relation(fields: [funding_source_id], references: [id], map: "fk_asset_funding_source_id")
+  user                user?           @relation(fields: [assigned_to_user_id], references: [id], map: "fk_user_id")
+  location            location?       @relation(fields: [location_id], references: [id], map: "fk_location_id_asset")
+  model               model?          @relation(fields: [model_id], references: [id], map: "fk_model_id")
+  status              status?         @relation(fields: [status_id], references: [id], map: "fk_status_id_asset")
   transaction         transaction[]
 
   @@index([model_id], map: "fk_model_id")
   @@index([assigned_to_user_id], map: "fk_assigned_to_user_id")
   @@index([status_id], map: "fk_status_id_asset")
   @@index([location_id], map: "fk_location_id_asset")
+  @@index([funding_source_id], map: "fk_asset_funding_source_id")
 }
 
 model manufacturer {
@@ -104,4 +108,10 @@ model role {
   id   String @id @unique(map: "id_UNIQUE") @db.VarChar(38)
   name String @unique(map: "name_UNIQUE") @db.VarChar(45)
   user user[]
+}
+
+model funding_source {
+  id    String  @id @unique(map: "id_UNIQUE") @db.VarChar(38)
+  name  String  @unique(map: "name_UNIQUE") @db.VarChar(64)
+  asset asset[]
 }

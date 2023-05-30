@@ -92,3 +92,27 @@ export function MgmtDropdown({
 		</select>
 	);
 }
+
+export function MgmtDate({
+	changeHandler,
+	id,
+	placeholderText,
+	value,
+	disabledValue,
+	required,
+}) {
+	return (
+		<div className='input-group'>
+			<label>{placeholderText}</label>
+			<input
+				className='input input-bordered input-group-sm w-full max-w-xs'
+				type='date'
+				id={id}
+				onChange={changeHandler}
+				value={value || ""}
+				disabled={disabledValue || false}
+				required={required}
+			></input>
+		</div>
+	);
+}

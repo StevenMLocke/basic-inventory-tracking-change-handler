@@ -4,11 +4,18 @@ import { useRouter, usePathname } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import SectionHero from "@/components/sectionHero";
 import MgmtTabs from "./mgmtTabs";
-import { MgmtForm, MgmtFormTextInput, MgmtDropdown } from "./mgmtForm";
+import {
+	MgmtForm,
+	MgmtFormTextInput,
+	MgmtDropdown,
+	MgmtDate,
+} from "./mgmtForm";
 import { Table } from "./mgmtTable";
 import { Suspense } from "react";
 
 import { ErrorAlert, InfoAlert } from "./mgmtAlerts";
+
+import { dateToString } from "@/lib/clientHelpers";
 
 export default function ClientWrapper({
 	session,
@@ -19,6 +26,7 @@ export default function ClientWrapper({
 	apiUrl, //for the handlers
 	inputTextArr, //map to inputs on mgmtform
 	inputSelectArr, //map to inputs on mgmtform
+	inputDateArr, //map to inputs on mgmtfrom
 	children, //for testing
 }) {
 	const router = useRouter();
@@ -80,7 +88,10 @@ export default function ClientWrapper({
 	const createHandler = async (e) => {
 		e.preventDefault();
 		const data = {};
-		data[itemName.toLowerCase()] = { ...formFields, id: uuidv4() };
+		data[itemName.toLowerCase().split(" ").join("")] = {
+			...formFields,
+			id: uuidv4(),
+		};
 
 		const returnedItem = await postData(`${apiUrl}create`, data).then(
 			(json) => {
@@ -91,7 +102,6 @@ export default function ClientWrapper({
 		);
 
 		startTransition(() => {
-			console.log(returnedItem);
 			router.refresh();
 		});
 	};
@@ -109,7 +119,7 @@ export default function ClientWrapper({
 		}
 
 		const data = {};
-		data[itemName.toLowerCase()] = { ...formFields };
+		data[itemName.toLowerCase().split(" ").join("")] = { ...formFields };
 
 		await postData(`${apiUrl}/edit`, data).then((json) => {
 			setInfo(`${itemName} edited!`);
@@ -184,6 +194,19 @@ export default function ClientWrapper({
 						></MgmtDropdown>
 					);
 				})}
+				{inputDateArr?.map((item) => {
+					return (
+						<MgmtDate
+							key={item.id}
+							changeHandler={fieldChangeHandler}
+							disabledValue={disabledValue}
+							id={item.id}
+							placeholderText={item.placeholderText}
+							required={item.required}
+							value={formFields[item.id] ?? ""}
+						></MgmtDate>
+					);
+				})}
 			</>
 		);
 	}
@@ -204,7 +227,7 @@ export default function ClientWrapper({
 					dismissHandler={infoAlertDismissHandler}
 				></InfoAlert>
 			)}
-			<div className='flex flex-1 pt-4 overflow-hidden'>
+			<div className='flex flex-1 pt-4 '>
 				<div className='flex flex-col items-center flex-initial basis-1/6 2xl:basis-1/5'>
 					<MgmtTabs
 						role={session.user.role}
@@ -258,7 +281,7 @@ export default function ClientWrapper({
 					)}
 				</Suspense>
 			</div>
-			{/* <pre>{JSON.stringify(formFields, null, 2)}</pre> */}
+			<pre>{JSON.stringify(formFields, null, 2)}</pre>
 			{/* 			<pre>{JSON.stringify(session, null, 2)}</pre> */}
 			{/* <pre>{JSON.stringify(usePathname(), null, 2)}</pre> */}
 			{children}

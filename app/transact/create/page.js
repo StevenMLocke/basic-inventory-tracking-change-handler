@@ -21,6 +21,8 @@ export default async function Page() {
 		}
 	})
 
+	const fundingSources = await prisma.funding_source.findMany()
+
 
 	const ids = {
 		action: {
@@ -67,6 +69,26 @@ export default async function Page() {
 				}
 			})
 		},
+		{
+			id: 'funding_source_id',
+			type: 'funding source',
+			required: false,
+			data: fundingSources.map((fSource) => {
+				return {
+					id: fSource.id,
+					name: fSource.name
+				}
+			}),
+		}
+	]
+
+	const dateInputArr = [
+		{
+			id: 'purchase_date',
+			placeholderText: "Purchase Date...",
+			disabledValue: false,
+			required: false,
+		}
 	]
 
 	return (
@@ -80,6 +102,7 @@ export default async function Page() {
 				apiUrl={apiUrl}
 				textFieldsArray={textFields}
 				selectArray={selectFields}
+				inputDateArray={dateInputArr}
 				heroText={`Create New Asset`}
 			>
 			</CreateAssetClientWrapper>

@@ -26,6 +26,8 @@ export async function POST(req) {
 		asset.status_id = status.id
 	}
 
+	asset.purchase_date = asset.purchase_date !== null ? new Date(asset.purchase_date) : null
+
 	let createdAsset
 	try {
 		createdAsset = await prisma.asset.create({ data: asset, })

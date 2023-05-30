@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/db";
+import { dateToString } from '@/lib/clientHelpers'
 
 export default async function Page() {
 	const session = await getServerSession(authOptions)
@@ -12,6 +13,7 @@ export default async function Page() {
 
 	const itemName = 'Asset'
 
+	const role = session?.user.role
 	const apiUrl = process.env.API
 
 	const assets = await prisma.asset.findMany({
@@ -46,6 +48,8 @@ export default async function Page() {
 					email: true
 				}
 			},
+			funding_source: true,
+			purchase_date: true,
 		},
 		orderBy: {
 			asset_number: 'asc'
@@ -70,6 +74,8 @@ export default async function Page() {
 		}
 	})
 
+	const fundingSources = await prisma.funding_source.findMany()
+
 
 	const tableData = assets?.map((asset) => {
 		return ({
@@ -83,7 +89,9 @@ export default async function Page() {
 			location_name: asset.location?.name,
 			status_name: asset.status?.name,
 			status_id: asset?.status?.id,
-			user_email: asset.user?.email
+			user_email: asset.user?.email,
+			funding_source: asset.funding_source,
+			purchase_date: asset.purchase_date ? dateToString(new Date(asset.purchase_date).toISOString().split('T')[0]) : null,
 		})
 	})
 
@@ -115,23 +123,37 @@ export default async function Page() {
 			Header: 'Serial #',
 			accessor: 'serial_number'
 		},
+		/* 		{
+					Header: '',
+					accessor: 'location_id',
+					id: 'location_id',
+				},
+				{
+					Header: 'Location',
+					accessor: 'location_name'
+				},
+				{
+					Header: 'Status',
+					accessor: 'status_name'
+				},
+				{
+					Header: '',
+					accessor: 'status_id',
+					id: 'status_id'
+				}, */
 		{
 			Header: '',
-			accessor: 'location_id',
-			id: 'location_id',
+			accessor: 'funding_source.id',
+			id: 'funding_source_id'
 		},
 		{
-			Header: 'Location',
-			accessor: 'location_name'
+			Header: 'Funding Source',
+			accessor: 'funding_source.name',
+			id: 'funding_source_name'
 		},
 		{
-			Header: 'Status',
-			accessor: 'status_name'
-		},
-		{
-			Header: '',
-			accessor: 'status_id',
-			id: 'status_id'
+			Header: 'Purchase Date',
+			accessor: 'purchase_date'
 		},
 	]
 
@@ -141,7 +163,8 @@ export default async function Page() {
 				"id",
 				"model_id",
 				"location_id",
-				"status_id"
+				"status_id",
+				"funding_source_id",
 			]
 		}
 	}
@@ -173,6 +196,30 @@ export default async function Page() {
 		},
 	]
 
+	if (role === "admin") {
+		selectFields.push(
+			{
+				id: 'funding_source_id',
+				type: ' funding source',
+				data: fundingSources.map(fSource => {
+					return {
+						id: fSource.id,
+						name: fSource.name
+					}
+				}),
+			}
+		)
+	}
+
+	const dateInputArr = [
+		{
+			id: 'purchase_date',
+			placeholderText: "Purchase Date...",
+			disabledValue: false,
+			required: false,
+		}
+	]
+
 	return (
 		session.user.role === "admin" ||
 			session.user.role === "asset manager" ? <ClientWrapper
@@ -183,6 +230,7 @@ export default async function Page() {
 				itemName={`${itemName}`}
 				inputTextArr={textFields}
 				inputSelectArr={selectFields}
+				inputDateArr={dateInputArr}
 				apiUrl={`${apiUrl}${itemName.toLowerCase()}/`}
 			></ClientWrapper> : redirect('/')
 	)

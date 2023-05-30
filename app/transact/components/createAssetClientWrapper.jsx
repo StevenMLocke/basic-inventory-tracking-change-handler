@@ -5,6 +5,7 @@ import {
 	MgmtDropdown,
 	MgmtForm,
 	MgmtFormTextInput,
+	MgmtDate,
 } from "./../../manage/components/mgmtForm";
 import { v4 as uuidv4 } from "uuid";
 import { useState, useMemo, startTransition } from "react";
@@ -15,6 +16,7 @@ export function CreateAssetClientWrapper({
 	apiUrl,
 	textFieldsArray,
 	selectArray,
+	inputDateArray,
 	heroText,
 }) {
 	const router = useRouter();
@@ -114,6 +116,19 @@ export function CreateAssetClientWrapper({
 						></MgmtDropdown>
 					);
 				})}
+				{inputDateArray?.map((item) => {
+					return (
+						<MgmtDate
+							key={item.id}
+							changeHandler={fieldChangeHandler}
+							disabledValue={disabledValue}
+							id={item.id}
+							placeholderText={item.placeholderText}
+							required={item.required}
+							value={formFields[item.id] ?? ""}
+						></MgmtDate>
+					);
+				})}
 			</>
 		);
 	}
@@ -146,6 +161,7 @@ export function CreateAssetClientWrapper({
 							</MgmtForm>
 							<div className='flex justify-center items-center '></div>
 							{/* 							<pre>{JSON.stringify("poo", null, 2)}</pre> */}
+							<pre>{JSON.stringify(formFields, null, 2)}</pre>
 						</div>
 					</div>
 				</div>
