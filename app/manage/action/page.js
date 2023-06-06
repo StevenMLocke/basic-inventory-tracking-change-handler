@@ -25,13 +25,15 @@ export default async function Page() {
 		},
 		{
 			Header: "Action Type",
-			accessor: "type"
+			accessor: "type",
+			Filter: '',
 		}
 	];
 
 	const tableOptions = {
 		initialState: {
 			hiddenColumns: ["id"],
+			pageSize: 25
 		},
 	};
 

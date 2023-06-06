@@ -1,6 +1,6 @@
 "use client";
-import SectionHero from "@/components/sectionHero";
-import { ErrorAlert, InfoAlert } from "./../../manage/components/mgmtAlerts";
+import { ContentWrapper } from "@/components/structures";
+import { Alerts } from "./../../manage/components/mgmtAlerts";
 import {
 	MgmtDropdown,
 	MgmtForm,
@@ -10,6 +10,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { useState, useMemo, startTransition } from "react";
 import { useRouter } from "next/navigation";
+import { postData } from "@/lib/clientHelpers";
 
 export function CreateAssetClientWrapper({
 	ids,
@@ -25,16 +26,6 @@ export function CreateAssetClientWrapper({
 	const [info, setInfo] = useState();
 	const [formFields, setFormFields] = useState({});
 
-	const postData = async function (url, data) {
-		const res = await fetch(url, {
-			method: "POST",
-			body: JSON.stringify(data),
-			next: { revalidate: 0 },
-		});
-
-		return res.json();
-	};
-
 	const dismissHandler = () => {
 		setError();
 		setInfo();
@@ -49,7 +40,6 @@ export function CreateAssetClientWrapper({
 
 	const submitHandler = async (e) => {
 		e.preventDefault();
-		//attempt to create asset
 		const data = {
 			asset: {
 				id: uuidv4(),
@@ -58,22 +48,25 @@ export function CreateAssetClientWrapper({
 				...formFields,
 			},
 		};
-		//create and log transaction
-		const createdAsset = await postData(`${apiUrl}asset/create`, data);
-		if (createdAsset) {
-			console.log("created");
 
-			const transaction = {
-				id: uuidv4(),
-				date: new Date().toISOString(),
-				asset_id: data.asset.id,
-				action_id: ids.action.id,
-				action_user_id: ids.transactor.id,
-				location_id: ids.location.id,
-			};
-			await postData(`${apiUrl}transaction/create`, transaction);
-		} else {
-			setError("Something went rongk");
+		try {
+			//attempt to create asset
+			const createdAsset = await postData(`${apiUrl}asset/create`, data);
+			//create and log transaction
+			if (createdAsset) {
+				const transaction = {
+					id: uuidv4(),
+					date: new Date().toISOString(),
+					asset_id: data.asset.id,
+					action_id: ids.action.id,
+					action_user_id: ids.transactor.id,
+					location_id: ids.location.id,
+				};
+				await postData(`${apiUrl}transaction/create`, transaction);
+			}
+		} catch (err) {
+			setError("Asset not created. Maybe a duplicate asset number.");
+			return;
 		}
 
 		setFormFields({});
@@ -135,37 +128,20 @@ export function CreateAssetClientWrapper({
 
 	return (
 		<>
-			{error && (
-				<ErrorAlert
-					dismissHandler={dismissHandler}
-					errorText={error}
-				></ErrorAlert>
-			)}
-			{info && (
-				<InfoAlert
-					dismissHandler={dismissHandler}
-					infoText={info}
-				></InfoAlert>
-			)}
-			<div className='flex flex-col w-full overflow-y-auto'>
-				<div className='flex flex-col flex-1 min-w-full items-center '>
-					<SectionHero title={heroText}></SectionHero>
-					<div className='flex flex-1 '>
-						<div className='flex flex-col flex-1 justify-between'>
-							<MgmtForm
-								buttonText={"Create"}
-								buttonClickHandler={submitHandler}
-							>
-								<h2 className='prose-xl font-semibold'>Create New Asset</h2>
-								{formInputs(textFieldsArray, selectArray, false)}
-							</MgmtForm>
-							<div className='flex justify-center items-center '></div>
-							{/* 							<pre>{JSON.stringify("poo", null, 2)}</pre> */}
-							<pre>{JSON.stringify(formFields, null, 2)}</pre>
-						</div>
-					</div>
-				</div>
-			</div>
+			<Alerts
+				dismissHandler={dismissHandler}
+				error={error}
+				info={info}
+			></Alerts>
+			<ContentWrapper heroText={heroText}>
+				<MgmtForm
+					buttonText={"Create"}
+					buttonClickHandler={submitHandler}
+				>
+					<h2 className='prose-xl font-semibold'>Create New Asset</h2>
+					{formInputs(textFieldsArray, selectArray, false)}
+				</MgmtForm>
+			</ContentWrapper>
 		</>
 	);
 }

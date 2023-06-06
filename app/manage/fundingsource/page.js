@@ -33,6 +33,7 @@ export default async function Page() {
 		{
 			Header: 'Source Name',
 			accessor: 'name',
+			Filter: '',
 		},
 	]
 
@@ -40,7 +41,8 @@ export default async function Page() {
 		initialState: {
 			hiddenColumns: [
 				"id",
-			]
+			],
+			pageSize: 25,
 		}
 	}
 

@@ -227,7 +227,7 @@ export default function ClientWrapper({
 					dismissHandler={infoAlertDismissHandler}
 				></InfoAlert>
 			)}
-			<div className='flex flex-1 pt-4 '>
+			<div className='flex flex-1 pt-4'>
 				<div className='flex flex-col items-center flex-initial basis-1/6 2xl:basis-1/5'>
 					<MgmtTabs
 						role={session.user.role}
@@ -281,7 +281,7 @@ export default function ClientWrapper({
 					)}
 				</Suspense>
 			</div>
-			<pre>{JSON.stringify(formFields, null, 2)}</pre>
+			{/* <pre>{JSON.stringify(formFields, null, 2)}</pre> */}
 			{/* 			<pre>{JSON.stringify(session, null, 2)}</pre> */}
 			{/* <pre>{JSON.stringify(usePathname(), null, 2)}</pre> */}
 			{children}

@@ -24,6 +24,9 @@ export default async function SideBar({ session }) {
 								<li>
 									<Link href={"/view/alltransactions"}>All Transactions</Link>
 								</li>
+								<li>
+									<Link href={"/view/assets"}>Assets</Link>
+								</li>
 							</ul>
 						</Accordion>
 					)}
@@ -81,6 +84,11 @@ export default async function SideBar({ session }) {
 									session.user.role === "asset manager") && (
 									<li>
 										<Link href={"/manage/model"}>Models</Link>
+									</li>
+								)}
+								{session.user.role === "admin" && (
+									<li>
+										<Link href={"/manage/fundingsource"}>Funding Sources</Link>
 									</li>
 								)}
 								{session.user.role === "admin" && (

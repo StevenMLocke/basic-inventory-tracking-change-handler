@@ -56,16 +56,19 @@ export default async function Page() {
 		{
 			Header: "Model",
 			accessor: "name",
+			Filter: '',
 		},
 		{
 			Header: "Manufacturer",
-			accessor: "manufacturer_name"
+			accessor: "manufacturer_name",
+			Filter: '',
 		}
 	];
 
 	const tableOptions = {
 		initialState: {
 			hiddenColumns: ["id", "manufacturer_id"],
+			pageSize: 25,
 		},
 	};
 

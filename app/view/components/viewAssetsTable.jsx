@@ -1,61 +1,91 @@
 "use client";
-import { useTable, useSortBy, useFilters, usePagination } from "react-table";
+import {
+	useTable,
+	useSortBy,
+	useFilters,
+	useFlexLayout,
+	usePagination,
+} from "react-table";
 import { useMemo, useState } from "react";
 import { Flipped, Flipper } from "react-flip-toolkit";
-import { TransactionCard } from "./../../transact/components/transactionCard";
 import {
 	SelectColumnFilter,
 	TextColumnFilter,
 } from "@/components/tableParts/filters";
 import { TableWrapper } from "@/components/tableParts/structures";
 
-export function ViewTable({ dataData }) {
-	const [rowData, setRowData] = useState(null);
+export function ViewAssetsTable({ dataData }) {
 	const [activeRowInd, setActiveRowInd] = useState(-1);
 	const [flipped, setFlipped] = useState(false);
+
+	//https://codesandbox.io/s/github/tannerlinsley/react-table/tree/v7/examples/column-resizing
+	const defaultColumn = useMemo(
+		() => ({
+			minWidth: 1,
+			width: 5,
+			maxWidth: 400,
+			Filter: TextColumnFilter,
+		}),
+		[]
+	);
 
 	const columns = useMemo(
 		() => [
 			{
-				Header: "Date",
-				accessor: "date",
-				Filter: SelectColumnFilter,
-				filter: "includes",
-			},
-			{
-				Header: "Action",
-				accessor: "action",
-				Filter: SelectColumnFilter,
-				filter: "includes",
-			},
-			{
-				Header: "Asset Number",
-				accessor: "asset.asset_number",
+				Header: "Asset",
+				accessor: "asset_number",
 				Filter: SelectColumnFilter,
 				filter: "equals",
 			},
 			{
-				Header: "Manufacturer",
-				accessor: "asset.model.manufacturer.name",
+				Header: "Manu.",
+				accessor: "model.manufacturer.name",
 				Filter: SelectColumnFilter,
-				filter: "includes",
+				filter: "equals",
 			},
 			{
 				Header: "Model",
-				accessor: "asset.model.name",
+				accessor: "model.name",
 				Filter: SelectColumnFilter,
-				filter: "includes",
+				filter: "equals",
 			},
 			{
-				Header: "Asset User",
-				accessor: "asset_user.email",
-				Filter: TextColumnFilter,
+				Header: "Serial #",
+				accessor: "serial_number",
+				Filter: SelectColumnFilter,
+				filter: "equals",
 			},
 			{
-				Header: "Transactor",
-				accessor: "transactor",
+				Header: "User Name",
+				accessor: "user.full_name",
+			},
+			{
+				Header: "User Email",
+				accessor: "user.email",
+			},
+			{
+				Header: "Location",
+				accessor: "location.name",
 				Filter: SelectColumnFilter,
-				filter: "includes",
+				filter: "equals",
+			},
+			{
+				Header: "Status",
+				accessor: "status.name",
+				Filter: SelectColumnFilter,
+				filter: "equals",
+			},
+			{
+				Header: "Funding Src.",
+				accessor: "funding_source.name",
+				Filter: SelectColumnFilter,
+				filter: "equals",
+			},
+			{
+				Header: "Purchase Date",
+				accessor: "formattedPurchaseDate",
+				Filter: SelectColumnFilter,
+				filter: "equals",
 			},
 		],
 		[]
@@ -64,14 +94,14 @@ export function ViewTable({ dataData }) {
 	const data = useMemo(() => dataData, [dataData]);
 
 	const tableInstance = useTable(
-		{ columns, data, initialState: { pageSize: 25 } },
+		{ columns, data, defaultColumn, initialState: { pageSize: 25 } },
 		useFilters,
 		useSortBy,
+		useFlexLayout,
 		usePagination
 	);
 
 	const rowClickHandler = (e, row) => {
-		setRowData({ ...row.original });
 		setActiveRowInd(row.index);
 	};
 
@@ -94,28 +124,13 @@ export function ViewTable({ dataData }) {
 
 	return (
 		<>
-			{rowData && (
-				<div
-					className=' w-full h-[100vh] absolute flex justify-center items-start backdrop-blur-sm z-50 pt-4'
-					onClick={() => setRowData(null)}
-				>
-					<TransactionCard
-						action={rowData.action}
-						rowDate={rowData.date}
-						asset={rowData.asset}
-						user={rowData.asset_user}
-						transactor={rowData.transactor}
-						location={rowData.location}
-					></TransactionCard>
-				</div>
-			)}
 			<TableWrapper>
 				<Flipper
 					flipKey={flipped}
 					className='min-w-full'
 				>
 					<table
-						className='min-w-full table table-auto table-compact bg-neutral'
+						className='flex flex-1 w-full min-w-full table table-auto table-compact bg-neutral'
 						{...getTableProps()}
 					>
 						<thead className='table-header-group sticky top-0'>
@@ -201,6 +216,7 @@ export function ViewTable({ dataData }) {
 						</tbody>
 					</table>
 				</Flipper>
+				{/* https://codesandbox.io/embed/github/tannerlinsley/react-table/tree/v7/examples/pagination */}
 			</TableWrapper>
 			<div className='pagination flex bg-base-200 p-2 min-w-full justify-around'>
 				<div>

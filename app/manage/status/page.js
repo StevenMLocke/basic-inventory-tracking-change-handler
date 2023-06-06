@@ -25,13 +25,15 @@ export default async function Page() {
 		},
 		{
 			Header: "Status",
-			accessor: 'name'
+			accessor: 'name',
+			Filter: '',
 		}
 	];
 
 	const tableOptions = {
 		initialState: {
 			hiddenColumns: ["id"],
+			pageSize: 25,
 		},
 	};
 

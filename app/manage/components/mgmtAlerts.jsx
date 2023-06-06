@@ -59,3 +59,22 @@ export function InfoAlert({ infoText, dismissHandler }) {
 		</div>
 	);
 }
+
+export function Alerts({ error, info, dismissHandler }) {
+	return (
+		<>
+			{error && (
+				<ErrorAlert
+					dismissHandler={dismissHandler}
+					errorText={error}
+				></ErrorAlert>
+			)}
+			{info && (
+				<InfoAlert
+					dismissHandler={dismissHandler}
+					infoText={info}
+				></InfoAlert>
+			)}
+		</>
+	);
+}

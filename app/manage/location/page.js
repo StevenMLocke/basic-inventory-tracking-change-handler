@@ -26,12 +26,14 @@ export default async function Page() {
 		{
 			Header: "Location",
 			accessor: "name",
+			Filter: '',
 		},
 	];
 
 	const tableOptions = {
 		initialState: {
 			hiddenColumns: ["id"],
+			pageSize: 25,
 		},
 	};
 

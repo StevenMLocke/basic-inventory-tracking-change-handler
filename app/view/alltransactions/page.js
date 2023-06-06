@@ -80,7 +80,7 @@ export default async function Page() {
 	})
 
 	return (
-		<div className='flex flex-col min-w-full items-center'>
+		<div className='content-wrapper flex flex-col min-w-full items-center'>
 			<SectionHero title={`Transactions`}></SectionHero>
 			<Suspense fallback={<p>Suspenseful!!!</p>}>
 				<ViewTable dataData={data}></ViewTable>

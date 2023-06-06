@@ -62,7 +62,8 @@ export default async function Page(req) {
 		},
 		{
 			Header: 'Role',
-			accessor: 'role_name'
+			accessor: 'role_name',
+			Filter: '',
 		},
 		{
 			Header: "",
@@ -74,13 +75,15 @@ export default async function Page(req) {
 	if (role === "admin") {
 		tableColumns.push({
 			Header: 'Authorized?',
-			accessor: 'authorized_bitch_user'
+			accessor: 'authorized_bitch_user',
+			Filter: '',
 		})
 	}
 
 	const tableOptions = {
 		initialState: {
 			hiddenColumns: ["id", "role_id"],
+			pageSize: 25,
 		},
 	};
 

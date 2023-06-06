@@ -104,11 +104,12 @@ export default async function Page() {
 		{
 			Header: 'Asset #',
 			accessor: 'asset_number',
-			maxWidth: 75
+			maxWidth: 75,
 		},
 		{
 			Header: 'Model',
-			accessor: 'model'
+			accessor: 'model',
+			Filter: ''
 		},
 		{
 			Header: 'Model id',
@@ -117,30 +118,13 @@ export default async function Page() {
 		},
 		{
 			Header: 'Manufacturer',
-			accessor: 'manufacturer'
+			accessor: 'manufacturer',
+			Filter: ''
 		},
 		{
 			Header: 'Serial #',
 			accessor: 'serial_number'
 		},
-		/* 		{
-					Header: '',
-					accessor: 'location_id',
-					id: 'location_id',
-				},
-				{
-					Header: 'Location',
-					accessor: 'location_name'
-				},
-				{
-					Header: 'Status',
-					accessor: 'status_name'
-				},
-				{
-					Header: '',
-					accessor: 'status_id',
-					id: 'status_id'
-				}, */
 		{
 			Header: '',
 			accessor: 'funding_source.id',
@@ -149,11 +133,13 @@ export default async function Page() {
 		{
 			Header: 'Funding Source',
 			accessor: 'funding_source.name',
-			id: 'funding_source_name'
+			id: 'funding_source_name',
+			Filter: ''
 		},
 		{
 			Header: 'Purchase Date',
-			accessor: 'purchase_date'
+			accessor: 'purchase_date',
+			Filter: ''
 		},
 	]
 
@@ -165,7 +151,8 @@ export default async function Page() {
 				"location_id",
 				"status_id",
 				"funding_source_id",
-			]
+			],
+			pageSize: 25
 		}
 	}
 

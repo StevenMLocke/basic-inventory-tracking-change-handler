@@ -1,7 +1,7 @@
 "use client";
 import { AssetCard } from "./assetCard";
-import SectionHero from "@/components/sectionHero";
-import { ErrorAlert, InfoAlert } from "./../../manage/components/mgmtAlerts";
+import { ContentWrapper } from "@/components/structures";
+import { Alerts } from "./../../manage/components/mgmtAlerts";
 import {
 	MgmtDropdown,
 	MgmtForm,
@@ -10,6 +10,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { useState, useMemo, startTransition } from "react";
 import { useRouter } from "next/navigation";
+import { postData } from "@/lib/clientHelpers";
 
 export function MoveAssetClientWrapper({
 	ids,
@@ -35,16 +36,6 @@ export function MoveAssetClientWrapper({
 			return asset.asset_number.includes(query);
 		});
 	}, [query, assets]);
-
-	const postData = async function (url, data) {
-		const res = await fetch(url, {
-			method: "POST",
-			body: JSON.stringify(data),
-			next: { revalidate: 0 },
-		});
-
-		return res.json();
-	};
 
 	const inputOnChange = (e) => {
 		setQuery(e.target.value);
@@ -143,49 +134,33 @@ export function MoveAssetClientWrapper({
 
 	return (
 		<>
-			{error && (
-				<ErrorAlert
-					dismissHandler={dismissHandler}
-					errorText={error}
-				></ErrorAlert>
-			)}
-			{info && (
-				<InfoAlert
-					dismissHandler={dismissHandler}
-					infoText={info}
-				></InfoAlert>
-			)}
-			<div className='flex flex-col w-full overflow-y-auto'>
-				<div className='flex flex-col flex-1 min-w-full items-center '>
-					<SectionHero title={heroText}></SectionHero>
-					<div className='flex flex-1 '>
-						<div className='flex flex-col flex-1 justify-between'>
-							<MgmtForm
-								includeButton={false}
-								buttonClickHandler={formSubmit}
-							>
-								<h2 className='prose-xl font-semibold'>Asset Number Search</h2>
-								{formInputs(textFieldsArray, selectArray, false)}
+			<Alerts
+				dismissHandler={dismissHandler}
+				error={error}
+				info={info}
+			></Alerts>
+			<ContentWrapper heroText={heroText}>
+				<MgmtForm
+					includeButton={false}
+					buttonClickHandler={formSubmit}
+				>
+					<h2 className='prose-xl font-semibold'>Asset Number Search</h2>
+					{formInputs(textFieldsArray, selectArray, false)}
 
-								{filteredAssets.length === 1 && query && (
-									<AssetCard
-										asset={filteredAssets[0]}
-										clickHandler={clickHandler}
-										buttonText={assetCardButtonText}
-									></AssetCard>
-								)}
-							</MgmtForm>
-							<div className='flex justify-center items-center '>
-								<h3>
-									{assets.length} assets currently {assetState}.
-								</h3>
-							</div>
-							{/* 							<pre>{JSON.stringify(filteredAssets, null, 2)}</pre>
-							<pre>{JSON.stringify(formFields, null, 2)}</pre> */}
-						</div>
-					</div>
+					{filteredAssets.length === 1 && query && (
+						<AssetCard
+							asset={filteredAssets[0]}
+							clickHandler={clickHandler}
+							buttonText={assetCardButtonText}
+						></AssetCard>
+					)}
+				</MgmtForm>
+				<div className='flex justify-center items-center '>
+					<h3>
+						{assets.length} assets currently {assetState}.
+					</h3>
 				</div>
-			</div>
+			</ContentWrapper>
 		</>
 	);
 }

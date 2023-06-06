@@ -5,6 +5,7 @@ import SideBar from '@/components/sideBar'
 import { Main } from '@/components/main'
 import { Suspense } from 'react'
 import { Raleway } from 'next/font/google'
+import { PageWrapper } from '@/components/structures'
 
 export const metadata = {
 	title: 'Basic Inventory Tracking Change Handler',
@@ -22,7 +23,7 @@ export default async function RootLayout({ children }) {
 	return (
 		<html lang="en" data-theme="dark" className={`${raleway.variable}`}>
 			<body className='min-h-[100cqh] transition-all duration-500 @container'>
-				<div className="page-wrapper flex flex-col sm:flex-row h-[100cqh] 2xl:w-5/6 mx-auto @container">
+				<PageWrapper>
 					{session && <SideBar session={session}>
 					</SideBar>}
 					<Main>
@@ -30,8 +31,7 @@ export default async function RootLayout({ children }) {
 							{children}
 						</Suspense>
 					</Main>
-				</div>
-				{/* 				<pre>{JSON.stringify(session, null, 2)}</pre> */}
+				</PageWrapper>
 			</body>
 		</html>
 	)
