@@ -1,11 +1,5 @@
 "use client";
-import {
-	useTable,
-	useSortBy,
-	useFilters,
-	useFlexLayout,
-	usePagination,
-} from "react-table";
+import { useTable, useSortBy, useFilters, usePagination } from "react-table";
 import { useMemo, useState } from "react";
 import { Flipped, Flipper } from "react-flip-toolkit";
 import {
@@ -22,7 +16,7 @@ export function ViewAssetsTable({ dataData }) {
 	const defaultColumn = useMemo(
 		() => ({
 			minWidth: 1,
-			width: 5,
+			width: 1,
 			maxWidth: 400,
 			Filter: TextColumnFilter,
 		}),
@@ -97,7 +91,6 @@ export function ViewAssetsTable({ dataData }) {
 		{ columns, data, defaultColumn, initialState: { pageSize: 25 } },
 		useFilters,
 		useSortBy,
-		useFlexLayout,
 		usePagination
 	);
 
@@ -130,7 +123,7 @@ export function ViewAssetsTable({ dataData }) {
 					className='min-w-full'
 				>
 					<table
-						className='flex flex-1 w-full min-w-full table table-auto table-compact bg-neutral'
+						className='flex flex-1 w-full max-w-full min-w-full table table-auto table-compact bg-neutral'
 						{...getTableProps()}
 					>
 						<thead className='table-header-group sticky top-0'>

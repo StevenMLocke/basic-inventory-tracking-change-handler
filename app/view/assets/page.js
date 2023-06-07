@@ -5,6 +5,7 @@ import SectionHero from "@/components/sectionHero"
 import { ViewAssetsTable } from './../components/viewAssetsTable'
 import { Suspense } from "react"
 import prisma from '@/lib/db'
+import { ContentWrapper } from "@/components/structures"
 
 export default async function Page() {
 	const session = await getServerSession(authOptions)
@@ -71,11 +72,10 @@ export default async function Page() {
 	})
 
 	return (
-		<div className='content-wrapper flex flex-col min-w-full items-center overflow-y-auto'>
-			<SectionHero title={`Assets`}></SectionHero>
+		<ContentWrapper heroText={`Assets`}>
 			<Suspense fallback={<p>Suspenseful!!!</p>}>
 				<ViewAssetsTable dataData={data}></ViewAssetsTable>
 			</Suspense>
-		</div>
+		</ContentWrapper>
 	)
 }

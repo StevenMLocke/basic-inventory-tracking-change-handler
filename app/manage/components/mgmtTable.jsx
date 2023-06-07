@@ -7,6 +7,8 @@ import {
 	usePagination,
 } from "react-table";
 import { Flipper, Flipped } from "react-flip-toolkit";
+import { TextColumnFilter } from "@/components/tableParts/filters";
+import { TableWrapper } from "@/components/tableParts/structures";
 
 export function Table({
 	tableData,
@@ -16,24 +18,6 @@ export function Table({
 	activeRowId,
 	options,
 }) {
-	//https://codesandbox.io/embed/github/tannerlinsley/react-table/tree/v7/examples/filtering
-	function TextColumnFilter({
-		column: { filterValue, preFilteredRows, setFilter },
-	}) {
-		const count = preFilteredRows.length;
-
-		return (
-			<input
-				className='input input-bordered input-sm max-w-[5rem] form-control my-2'
-				value={filterValue || ""}
-				onChange={(e) => {
-					setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
-				}}
-				placeholder={`Search ${count} records...`}
-			/>
-		);
-	}
-
 	const data = useMemo(() => tableData, [tableData]);
 	const columns = useMemo(() => tableColumns, [tableColumns]);
 	//https://codesandbox.io/s/github/tannerlinsley/react-table/tree/v7/examples/column-resizing
@@ -51,7 +35,6 @@ export function Table({
 		getTableProps,
 		getTableBodyProps,
 		headerGroups,
-		rows,
 		prepareRow,
 		page,
 		canPreviousPage,
@@ -72,7 +55,7 @@ export function Table({
 		},
 		useFilters,
 		useSortBy,
-		useFlexLayout,
+
 		usePagination
 	);
 
@@ -82,15 +65,15 @@ export function Table({
 
 	//reference https://github.com/TanStack/table/discussions/2647 for key solve
 	return (
-		<div className='flex flex-col flex-1 items-center'>
-			<div className='flex min-w-full items-start overflow-y-auto max-h-[100cqh] scroll-smooth'>
+		<div className='w-full flex flex-col max-h-[100cqh] justify-between overflow-hidden'>
+			<TableWrapper>
 				<Flipper
 					flipKey={flipped}
-					className='w-full'
+					className='min-w-full'
 				>
 					<table
+						className='min-w-full table table-auto table-compact bg-neutral'
 						{...getTableProps()}
-						className='flex flex-1 w-full min-w-full table table-auto table-compact bg-neutral'
 					>
 						<thead className='table-header-group sticky top-0'>
 							{headerGroups.map((headerGroup) => {
@@ -174,7 +157,7 @@ export function Table({
 						</tbody>
 					</table>
 				</Flipper>
-			</div>
+			</TableWrapper>
 			{tableData.length > 10 && (
 				<div className='pagination flex bg-base-200 p-2 min-w-full justify-around'>
 					<div>

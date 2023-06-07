@@ -10,9 +10,11 @@ export function PageWrapper({ children }) {
 
 export function ContentWrapper({ heroText, children }) {
 	return (
-		<div className='content-wrapper flex flex-col flex-1 min-w-full items-center overflow-y-auto'>
+		<div className='content-wrapper @container flex flex-col min-w-full'>
 			<SectionHero title={heroText}></SectionHero>
-			<div className='flex flex-col flex-1 justify-between'>{children}</div>
+			<div className='w-full flex flex-col h-[100cqh] justify-between pt-2 overflow-hidden'>
+				{children}
+			</div>
 		</div>
 	);
 }

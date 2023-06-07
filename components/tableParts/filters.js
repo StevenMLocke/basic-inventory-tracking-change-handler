@@ -22,7 +22,7 @@ export function SelectColumnFilter({
 
 	return (
 		<select
-			className='select select-bordered select-sm max-w-[5rem] form-control my-2 '
+			className='select select-bordered select-sm w-[4rem] form-control my-2 '
 			value={filterValue}
 			onChange={(e) => {
 				setFilter(e.target.value || undefined);

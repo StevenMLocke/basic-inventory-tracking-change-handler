@@ -12,10 +12,9 @@ import {
 } from "./mgmtForm";
 import { Table } from "./mgmtTable";
 import { Suspense } from "react";
-
-import { ErrorAlert, InfoAlert } from "./mgmtAlerts";
-
-import { dateToString } from "@/lib/clientHelpers";
+import { Alerts } from "./../../manage/components/mgmtAlerts";
+import { ContentWrapper } from "@/components/structures";
+import { TableWrapper } from "@/components/tableParts/structures";
 
 export default function ClientWrapper({
 	session,
@@ -58,6 +57,11 @@ export default function ClientWrapper({
 
 	const infoAlertDismissHandler = (e) => {
 		setInfo(null);
+	};
+	const dismissHandler = async (e) => {
+		setInfo(null);
+		setError(false);
+		setFormFields({});
 	};
 
 	const tabClickHandler = (e) => {
@@ -213,78 +217,70 @@ export default function ClientWrapper({
 
 	//to render
 	return (
-		<div className='flex flex-col min-w-full'>
-			<SectionHero title={`${itemName}s`}></SectionHero>
-			{error && (
-				<ErrorAlert
-					errorText={error}
-					dismissHandler={errorAlertDismissHandler}
-				></ErrorAlert>
-			)}
-			{info && (
-				<InfoAlert
-					infoText={info}
-					dismissHandler={infoAlertDismissHandler}
-				></InfoAlert>
-			)}
-			<div className='flex flex-1 pt-4'>
-				<div className='flex flex-col items-center flex-initial basis-1/6 2xl:basis-1/5'>
-					<MgmtTabs
-						role={session.user.role}
-						clickHandler={tabClickHandler}
-						selectedTabNum={selected}
-						createEnabled={usePathname() == "/manage/asset" ? false : true}
-					></MgmtTabs>
-					<Suspense fallback={<p>Forms are loading, I suppose.</p>}>
-						<div className='tabs-content flex flex-col items-center w-full'>
-							{selected == 1 && (
-								<MgmtForm
-									buttonClickHandler={createHandler}
-									buttonText={"Create"}
-								>
-									{(inputSelectArr || inputTextArr) &&
-										formInputs(inputTextArr, inputSelectArr, false)}
-								</MgmtForm>
-							)}
-							{selected == 2 && (
-								<MgmtForm
-									buttonClickHandler={editHandler}
-									buttonText={"Edit"}
-								>
-									{(inputSelectArr || inputTextArr) &&
-										formInputs(inputTextArr, inputSelectArr, false)}
-								</MgmtForm>
-							)}
-							{selected == 3 && (
-								<MgmtForm
-									buttonClickHandler={removeHandler}
-									buttonText={"remove"}
-								>
-									{(inputSelectArr || inputTextArr) &&
-										formInputs(inputTextArr, inputSelectArr, true)}
-								</MgmtForm>
-							)}
-						</div>
+		<>
+			<Alerts
+				dismissHandler={dismissHandler}
+				error={error}
+				info={info}
+			></Alerts>
+			<ContentWrapper heroText={`${itemName}s`}>
+				<div className='flex h-[calc(100cqh-86px-1.33rem)]'>
+					<div className='flex flex-col items-center flex-initial basis-1/6 2xl:basis-1/5'>
+						<MgmtTabs
+							role={session.user.role}
+							clickHandler={tabClickHandler}
+							selectedTabNum={selected}
+							createEnabled={usePathname() == "/manage/asset" ? false : true}
+						></MgmtTabs>
+						<Suspense fallback={<p>Forms are loading, I suppose.</p>}>
+							<div className='tabs-content flex flex-col items-center w-full'>
+								{selected == 1 && (
+									<MgmtForm
+										buttonClickHandler={createHandler}
+										buttonText={"Create"}
+									>
+										{(inputSelectArr || inputTextArr) &&
+											formInputs(inputTextArr, inputSelectArr, false)}
+									</MgmtForm>
+								)}
+								{selected == 2 && (
+									<MgmtForm
+										buttonClickHandler={editHandler}
+										buttonText={"Edit"}
+									>
+										{(inputSelectArr || inputTextArr) &&
+											formInputs(inputTextArr, inputSelectArr, false)}
+									</MgmtForm>
+								)}
+								{selected == 3 && (
+									<MgmtForm
+										buttonClickHandler={removeHandler}
+										buttonText={"remove"}
+									>
+										{(inputSelectArr || inputTextArr) &&
+											formInputs(inputTextArr, inputSelectArr, true)}
+									</MgmtForm>
+								)}
+							</div>
+						</Suspense>
+					</div>
+					<div className='divider divider-horizontal h-[90%] my-auto'></div>
+
+					<Suspense fallback={<p>Table is loading, I suppose</p>}>
+						{memoTableData && memoTableData.length !== 0 && (
+							<Table
+								tableData={memoTableData}
+								tableColumns={memoTableColumns}
+								selectHandler={tableRowSelectHandler}
+								selectedTab={selected}
+								activeRowId={activeRowId}
+								options={tableOptions}
+							></Table>
+						)}
 					</Suspense>
 				</div>
-				<div className='divider divider-horizontal h-[90%] my-auto'></div>
-				<Suspense fallback={<p>Table is loading, I suppose</p>}>
-					{memoTableData && memoTableData.length !== 0 && (
-						<Table
-							tableData={memoTableData}
-							tableColumns={memoTableColumns}
-							selectHandler={tableRowSelectHandler}
-							selectedTab={selected}
-							activeRowId={activeRowId}
-							options={tableOptions}
-						></Table>
-					)}
-				</Suspense>
-			</div>
-			{/* <pre>{JSON.stringify(formFields, null, 2)}</pre> */}
-			{/* 			<pre>{JSON.stringify(session, null, 2)}</pre> */}
-			{/* <pre>{JSON.stringify(usePathname(), null, 2)}</pre> */}
-			{children}
-		</div>
+				{children}
+			</ContentWrapper>
+		</>
 	);
 }

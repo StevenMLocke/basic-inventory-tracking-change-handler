@@ -1,10 +1,10 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { redirect } from "next/navigation"
-import SectionHero from "@/components/sectionHero"
 import { ViewTable } from './../components/viewTable'
 import { Suspense } from "react"
 import prisma from '@/lib/db'
+import { ContentWrapper } from "@/components/structures"
 
 export default async function Page() {
 	const session = await getServerSession(authOptions)
@@ -80,11 +80,10 @@ export default async function Page() {
 	})
 
 	return (
-		<div className='content-wrapper flex flex-col min-w-full items-center'>
-			<SectionHero title={`Transactions`}></SectionHero>
+		<ContentWrapper heroText={`Transactions`}>
 			<Suspense fallback={<p>Suspenseful!!!</p>}>
 				<ViewTable dataData={data}></ViewTable>
 			</Suspense>
-		</div>
+		</ContentWrapper>
 	)
 }
