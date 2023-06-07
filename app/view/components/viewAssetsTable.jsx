@@ -123,10 +123,10 @@ export function ViewAssetsTable({ dataData }) {
 					className='min-w-full'
 				>
 					<table
-						className='flex flex-1 w-full max-w-full min-w-full table table-auto table-compact bg-neutral'
+						className='flex flex-1 w-full max-w-full min-w-full table table-auto table-sm table-pin-rows bg-neutral'
 						{...getTableProps()}
 					>
-						<thead className='table-header-group sticky top-0'>
+						<thead className='table-header-group'>
 							{headerGroups.map((headerGroup) => {
 								const { key, ...restHeaderGroupProps } =
 									headerGroup.getHeaderGroupProps();
@@ -148,7 +148,7 @@ export function ViewAssetsTable({ dataData }) {
 													{...restHeader}
 													className={`${
 														header.isSorted ? "underline" : ""
-													} table-cell`}
+													} table-cell prose`}
 												>
 													{header.render("Header")}
 													<span

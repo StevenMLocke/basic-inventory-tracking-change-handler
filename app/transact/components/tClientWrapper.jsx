@@ -155,21 +155,22 @@ export function TransactionClientWrapper({
 				info={info}
 			></Alerts>
 			<ContentWrapper heroText={heroText}>
-				<MgmtForm
-					includeButton={false}
-					buttonClickHandler={formSubmit}
-				>
-					<h2 className='prose-xl font-semibold'>Asset Number Search</h2>
-					{formInputs(textFieldsArray, selectArray, false)}
-
-					{filteredAssets.length === 1 && query && (
-						<AssetCard
-							asset={filteredAssets[0]}
-							clickHandler={clickHandler}
-							buttonText={assetCardButtonText}
-						></AssetCard>
-					)}
-				</MgmtForm>
+				<div className='flex flex-col flex-1 pt-4 border-2 border-black'>
+					<MgmtForm
+						includeButton={false}
+						buttonClickHandler={formSubmit}
+					>
+						<h2 className='prose-xl font-semibold'>Asset Number Search</h2>
+						{formInputs(textFieldsArray, selectArray, false)}
+						{filteredAssets.length === 1 && query && (
+							<AssetCard
+								asset={filteredAssets[0]}
+								clickHandler={clickHandler}
+								buttonText={assetCardButtonText}
+							></AssetCard>
+						)}
+					</MgmtForm>
+				</div>
 				<div className='flex justify-center items-center '>
 					<h3>
 						{assets.length} assets currently {assetState}.

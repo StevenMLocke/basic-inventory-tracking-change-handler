@@ -8,7 +8,7 @@ export function MgmtForm({
 }) {
 	return (
 		<form
-			className={`${className} flex flex-col items-center mx-auto my-2 gap-2`}
+			className={`${className} flex flex-col items-center mx-auto my-2 gap-2 w-full`}
 			onSubmit={buttonClickHandler}
 		>
 			{children}
@@ -102,10 +102,12 @@ export function MgmtDate({
 	required,
 }) {
 	return (
-		<div className='input-group'>
-			<label>{placeholderText}</label>
+		<div className='input-group input-group-sm input-group-vertical justify-center max-w-xs'>
+			<label className='pl-2 label-text-alt bg-base-200'>
+				{placeholderText}
+			</label>
 			<input
-				className='input input-bordered input-group-sm w-full max-w-xs'
+				className='input input-bordered input-sm w-full max-w-xs'
 				type='date'
 				id={id}
 				onChange={changeHandler}

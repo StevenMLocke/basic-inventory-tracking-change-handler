@@ -72,10 +72,10 @@ export function Table({
 					className='min-w-full'
 				>
 					<table
-						className='min-w-full table table-auto table-compact bg-neutral'
+						className='min-w-full table table-auto table-pin-rows table-sm bg-neutral'
 						{...getTableProps()}
 					>
-						<thead className='table-header-group sticky top-0'>
+						<thead className='table-header-group'>
 							{headerGroups.map((headerGroup) => {
 								const { key, ...restHeaderGroupProps } =
 									headerGroup.getHeaderGroupProps();
@@ -96,7 +96,7 @@ export function Table({
 													{...restCol}
 													className={`${
 														col.isSorted ? "underline" : ""
-													} table-cell`}
+													} table-cell prose`}
 												>
 													{col.render("Header")}
 													<span
