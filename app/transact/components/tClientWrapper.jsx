@@ -155,7 +155,7 @@ export function TransactionClientWrapper({
 				info={info}
 			></Alerts>
 			<ContentWrapper heroText={heroText}>
-				<div className='flex flex-col flex-1 pt-4 border-2 border-black'>
+				<div className='flex flex-col flex-1 pt-4'>
 					<MgmtForm
 						includeButton={false}
 						buttonClickHandler={formSubmit}
