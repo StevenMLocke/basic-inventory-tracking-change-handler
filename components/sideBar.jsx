@@ -4,7 +4,7 @@ import { UserCard } from "@/components/userCard";
 
 export default async function SideBar({ session }) {
 	return (
-		<aside className='2xl:w-1/6 border-r-2 border-neutral-500 flex flex-col gap-2 p-4 bg-base-300'>
+		<aside className='2xl:w-1/6 border-r-2 border-neutral-500 flex flex-col gap-2 p-2 bg-base-300'>
 			{session && (
 				<UserCard
 					email={session.user.email}

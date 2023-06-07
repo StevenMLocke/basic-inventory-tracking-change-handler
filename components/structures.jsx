@@ -12,6 +12,7 @@ export function ContentWrapper({ heroText, children }) {
 	return (
 		<div className='content-wrapper @container flex flex-col min-w-full'>
 			<SectionHero title={heroText}></SectionHero>
+
 			<div className='w-full flex flex-col h-[100cqh] justify-between pt-2 overflow-hidden'>
 				{children}
 			</div>

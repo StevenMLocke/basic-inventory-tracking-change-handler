@@ -8,28 +8,26 @@ export default function Accordion({ title, children }) {
 
 	return (
 		<>
-			<div className='menu'>
-				<div
-					className='flex'
-					onClick={clickHandler}
-				>
-					<div className='flex flex-1 gap-2 justify-between'>
-						<div className='prose-xl font-semibold'>{title}</div>
-						<div className=' prose-2xl font-bold ml-auto mr-2'>
-							{expanded ? ` -` : ` +`}
-						</div>
+			<div
+				className='flex'
+				onClick={clickHandler}
+			>
+				<div className='flex flex-1 justify-between'>
+					<div className='font-bold'>{title}</div>
+					<div className='text-2xl font-bold ml-auto mr-2'>
+						{expanded ? ` -` : ` +`}
 					</div>
 				</div>
-				<div
-					className={`flex transition-max-height
+			</div>
+			<div
+				className={`flex transition-max-height
 						${expanded && "max-h-[16rem]"}
 						${!expanded && "max-h-0"}
 						overflow-hidden
 					`}
-				>
-					<div className='divider divider-horizontal mx-0'></div>
-					{children}
-				</div>
+			>
+				<div className='divider divider-horizontal mx-0'></div>
+				{children}
 			</div>
 		</>
 	);
