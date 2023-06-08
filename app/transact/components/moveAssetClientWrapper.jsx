@@ -87,11 +87,10 @@ export function MoveAssetClientWrapper({
 			location_id: formFields?.location_id,
 		};
 
-		postData(`${apiUrl}transaction/create`, transactionData).then((res) =>
-			setInfo(`Asset #${asset.asset_number} ${action}.`)
-		);
-
-		setFormFields({});
+		postData(`${apiUrl}transaction/create`, transactionData).then(() => {
+			setInfo(`Asset #${asset.asset_number} ${action}.`);
+			setFormFields({});
+		});
 	};
 
 	function formInputs(textFieldsArray, selectArray, disabledValue) {
