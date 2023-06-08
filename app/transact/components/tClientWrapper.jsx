@@ -89,24 +89,28 @@ export function TransactionClientWrapper({
 				return;
 			}
 		}
-		postData(`${apiUrl}asset/edit`, assetData);
+		try {
+			await postData(`${apiUrl}asset/edit`, assetData);
+			//create transaction
+			const transactionData = {
+				id: uuidv4(),
+				date: new Date().toISOString(),
+				asset_id: asset.id,
+				action_id: ids.action.id ?? formFields.action_id,
+				action_user_id: ids.transactor.id,
+				asset_user_id: formFields?.asset_user_id ?? null,
+				location_id: formFields?.location_id ?? ids.location.id,
+			};
 
-		//create transaction
-		const transactionData = {
-			id: uuidv4(),
-			date: new Date().toISOString(),
-			asset_id: asset.id,
-			action_id: ids.action.id ?? formFields.action_id,
-			action_user_id: ids.transactor.id,
-			asset_user_id: formFields?.asset_user_id ?? null,
-			location_id: formFields?.location_id ?? ids.location.id,
-		};
-
-		postData(`${apiUrl}transaction/create`, transactionData).then((res) =>
-			setInfo(`Asset #${asset.asset_number} ${action}.`)
-		);
-
-		setFormFields({});
+			await postData(`${apiUrl}transaction/create`, transactionData).then(
+				(res) => setInfo(`Asset #${asset.asset_number} ${action}.`)
+			);
+			setFormFields({});
+		} catch (err) {
+			setError("Something did not work.");
+			setFormFields({});
+			return;
+		}
 	};
 
 	function formInputs(textFieldsArray, selectArray, disabledValue) {

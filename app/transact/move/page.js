@@ -26,6 +26,8 @@ export default async function Page() {
 	})
 	const statuses = await prisma.status.findMany()
 	const [{ id }] = statuses.filter(status => { return status.name === "Checked Out" })
+	const [destroyed] = statuses.filter(status => { return status.name === "Disposed" })
+	const [lost] = statuses.filter(status => { return status.name === "Lost or Stolen" })
 
 	const assets = await prisma.asset.findMany({
 		select: {
@@ -52,7 +54,11 @@ export default async function Page() {
 		},
 		where: {
 			NOT: {
-				status_id: id
+				OR: [
+					{ status_id: id },
+					{ status_id: lost.id },
+					{ status_id: destroyed.id },
+				]
 			}
 		},
 		orderBy: {

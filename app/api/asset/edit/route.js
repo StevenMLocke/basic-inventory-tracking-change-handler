@@ -10,7 +10,10 @@ export async function POST(req) {
 	delete asset.status_name
 	delete asset.user_email
 	delete asset.funding_source_name
-	asset.purchase_date = asset.purchase_date !== null ? new Date(asset.purchase_date) : null
+
+	if (asset.purchase_date) {
+		asset.purchase_date = new Date(asset.purchase_date)
+	}
 
 	const editedAsset = await prisma.asset.update({
 		where: {
