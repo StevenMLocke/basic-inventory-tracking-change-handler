@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 import { redirect } from "next/navigation"
-import { TransactionClientWrapper } from './../components/tClientWrapper'
+import { TransactionClientWrapper } from './../components/checkOutWrapper'
 import prisma from "@/lib/db"
 
 export default async function Page() {
@@ -34,6 +34,13 @@ export default async function Page() {
 		},
 		orderBy: {
 			ln: 'asc'
+		}
+	})
+
+	const formattedUsers = users.map((user) => {
+		return {
+			value: user.id,
+			label: `${user.ln}, ${user.fn} - ${user.email}`
 		}
 	})
 
@@ -90,17 +97,17 @@ export default async function Page() {
 	]
 
 	const selectFields = [
-		{
-			id: 'asset_user_id',
-			type: 'user',
-			required: false,
-			data: users.map(user => {
-				return {
-					id: user.id,
-					name: user.full_name
-				}
-			})
-		},
+		/* 		{
+					id: 'asset_user_id',
+					type: 'user',
+					required: false,
+					data: users.map(user => {
+						return {
+							id: user.id,
+							name: user.full_name
+						}
+					})
+				}, */
 		{
 			id: 'location_id',
 			type: 'location',
@@ -117,6 +124,7 @@ export default async function Page() {
 	return (session?.user.role === "admin" || session?.user.role === "transactor" || session.user.role === "asset manager") ?
 		<>
 			<TransactionClientWrapper
+				users={formattedUsers}
 				ids={ids}
 				assets={assets}
 				apiUrl={apiUrl}
