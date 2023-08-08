@@ -30,7 +30,6 @@ export default async function Page() {
 			full_name: true,
 			email: true,
 			role: true,
-			authorized_bitch_user: true,
 		},
 		orderBy: {
 			ln: 'asc'
@@ -97,17 +96,6 @@ export default async function Page() {
 	]
 
 	const selectFields = [
-		/* 		{
-					id: 'asset_user_id',
-					type: 'user',
-					required: false,
-					data: users.map(user => {
-						return {
-							id: user.id,
-							name: user.full_name
-						}
-					})
-				}, */
 		{
 			id: 'location_id',
 			type: 'location',
