@@ -38,10 +38,10 @@ export function TransactionClientWrapper({
 		});
 	}, [query, assets]);
 
-	const memoizedUsers = useMemo(() => {
+	/* 	const memoizedUsers = useMemo(() => {
 		return users;
 	}, [users]);
-
+ */
 	const postData = async function (url, data) {
 		const res = await fetch(url, {
 			method: "POST",
@@ -186,7 +186,7 @@ export function TransactionClientWrapper({
 									return { asset_user_id: val.value, ...p };
 								});
 							}}
-							options={memoizedUsers}
+							options={users}
 							id={"poo"}
 						></SearchableSelect>
 					</MgmtForm>
