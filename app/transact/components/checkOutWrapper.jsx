@@ -122,6 +122,20 @@ export function TransactionClientWrapper({
 	function formInputs(textFieldsArray, selectArray, disabledValue) {
 		return (
 			<>
+				{selectArray?.map((item) => {
+					return (
+						<MgmtDropdown
+							id={item.id}
+							placeholderText={`Select a(n) ${item.type}...`}
+							data={item.data}
+							disabledValue={disabledValue}
+							value={formFields[item.id] ?? ""}
+							changeHandler={fieldChangeHandler}
+							key={item.id}
+							required={item.required ?? true}
+						></MgmtDropdown>
+					);
+				})}
 				{textFieldsArray?.map((item) => {
 					return (
 						<MgmtFormTextInput
@@ -137,20 +151,6 @@ export function TransactionClientWrapper({
 							inputType={item.inputType}
 							required={item.required ?? true}
 						></MgmtFormTextInput>
-					);
-				})}
-				{selectArray?.map((item) => {
-					return (
-						<MgmtDropdown
-							id={item.id}
-							placeholderText={`Select a(n) ${item.type}...`}
-							data={item.data}
-							disabledValue={disabledValue}
-							value={formFields[item.id] ?? ""}
-							changeHandler={fieldChangeHandler}
-							key={item.id}
-							required={item.required ?? true}
-						></MgmtDropdown>
 					);
 				})}
 			</>
@@ -170,15 +170,9 @@ export function TransactionClientWrapper({
 						includeButton={false}
 						buttonClickHandler={formSubmit}
 					>
-						<h2 className='prose-xl font-semibold'>Asset Number Search</h2>
-						{formInputs(textFieldsArray, selectArray, false)}
-						{filteredAssets.length === 1 && query && (
-							<AssetCard
-								asset={filteredAssets[0]}
-								clickHandler={clickHandler}
-								buttonText={assetCardButtonText}
-							></AssetCard>
-						)}
+						<h2 className='prose-xl font-semibold'>
+							Select location, user, and asset number
+						</h2>
 						<SearchableSelect
 							placeHolder={`Select user to check out to…`}
 							changeHandler={(val) => {
@@ -189,6 +183,14 @@ export function TransactionClientWrapper({
 							options={users}
 							id={"poo"}
 						></SearchableSelect>
+						{formInputs(textFieldsArray, selectArray, false)}
+						{filteredAssets.length === 1 && query && (
+							<AssetCard
+								asset={filteredAssets[0]}
+								clickHandler={clickHandler}
+								buttonText={assetCardButtonText}
+							></AssetCard>
+						)}
 					</MgmtForm>
 				</div>
 				<div className='flex justify-center items-center '>

@@ -20,8 +20,8 @@ export function SearchableSelect({ id, changeHandler, options, placeHolder }) {
 				text-sm
 				min-h-8 w-full max-w-xs'
 			classNames={{
-				menu: (state) => {
-					state.hasValue ? "border-[1px] border-slate-700/80 rounded-lg" : "";
+				menuList: (state) => {
+					return "border-[1px] border-slate-700/80 rounded-lg px-2 bg-neutral";
 				},
 			}}
 		></Select>
