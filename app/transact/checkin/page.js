@@ -41,9 +41,9 @@ export default async function Page() {
 				}
 			},
 		},
-		where: {
-			status_id: id
-		}
+		/* 		where: {
+					status_id: id
+				} */
 	})
 
 	const ids = {
