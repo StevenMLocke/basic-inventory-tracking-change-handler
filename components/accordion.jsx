@@ -21,7 +21,7 @@ export default function Accordion({ title, children }) {
 			</div>
 			<div
 				className={`flex transition-max-height
-						${expanded && "max-h-[16rem]"}
+						${expanded && "max-h-[18rem]"}
 						${!expanded && "max-h-0"}
 						overflow-hidden
 					`}

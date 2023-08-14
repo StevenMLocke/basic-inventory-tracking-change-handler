@@ -101,6 +101,11 @@ export default async function SideBar({ session }) {
 										<Link href={"/manage/action"}>Actions</Link>
 									</li>
 								)}
+								{session.user.role === "admin" && (
+									<li>
+										<Link href={"/manage/category"}>Categories</Link>
+									</li>
+								)}
 							</ul>
 						</Accordion>
 					)}

@@ -50,16 +50,8 @@ export function ViewAssetsTable({ dataData }) {
 				filter: "equals",
 			},
 			{
-				Header: "User Name",
-				accessor: "user.full_name",
-			},
-			{
-				Header: "User Email",
-				accessor: "user.email",
-			},
-			{
-				Header: "Location",
-				accessor: "location.name",
+				Header: "Category",
+				accessor: "category.name",
 				Filter: SelectColumnFilter,
 				filter: "equals",
 			},
@@ -68,6 +60,20 @@ export function ViewAssetsTable({ dataData }) {
 				accessor: "status.name",
 				Filter: SelectColumnFilter,
 				filter: "equals",
+			},
+			{
+				Header: "Location",
+				accessor: "location.name",
+				Filter: SelectColumnFilter,
+				filter: "equals",
+			},
+			{
+				Header: "User Name",
+				accessor: "user.full_name",
+			},
+			{
+				Header: "User Email",
+				accessor: "user.email",
 			},
 			{
 				Header: "Funding Src.",

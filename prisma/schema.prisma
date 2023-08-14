@@ -18,11 +18,13 @@ model asset {
   asset_number        String          @unique(map: "asset_number_UNIQUE") @db.VarChar(45)
   model_id            String?         @db.VarChar(38)
   serial_number       String          @unique(map: "serial_number_UNIQUE") @db.VarChar(64)
+  category_id         String?         @db.VarChar(38)
   assigned_to_user_id String?         @db.VarChar(38)
   status_id           String?         @db.VarChar(38)
   location_id         String?         @db.VarChar(38)
   funding_source_id   String?         @db.VarChar(38)
   purchase_date       DateTime?       @db.Date
+  category            category?       @relation(fields: [category_id], references: [id], map: "fk_asset_category_id")
   funding_source      funding_source? @relation(fields: [funding_source_id], references: [id], map: "fk_asset_funding_source_id")
   user                user?           @relation(fields: [assigned_to_user_id], references: [id], map: "fk_user_id")
   location            location?       @relation(fields: [location_id], references: [id], map: "fk_location_id_asset")
@@ -35,6 +37,7 @@ model asset {
   @@index([status_id], map: "fk_status_id_asset")
   @@index([location_id], map: "fk_location_id_asset")
   @@index([funding_source_id], map: "fk_asset_funding_source_id")
+  @@index([category_id], map: "fk_asset_category_id")
 }
 
 model manufacturer {
@@ -112,6 +115,12 @@ model role {
 
 model funding_source {
   id    String  @id @unique(map: "id_UNIQUE") @db.VarChar(38)
+  name  String  @unique(map: "name_UNIQUE") @db.VarChar(64)
+  asset asset[]
+}
+
+model category {
+  id    String  @id @unique(map: "id_UNIQUE") @default(dbgenerated("(uuid())")) @db.VarChar(38)
   name  String  @unique(map: "name_UNIQUE") @db.VarChar(64)
   asset asset[]
 }

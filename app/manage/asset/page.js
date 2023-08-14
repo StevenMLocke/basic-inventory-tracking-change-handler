@@ -39,6 +39,12 @@ export default async function Page() {
 				}
 			},
 			serial_number: true,
+			category: {
+				select: {
+					id: true,
+					name: true
+				}
+			},
 			status: true,
 			user: {
 				select: {
@@ -76,12 +82,15 @@ export default async function Page() {
 
 	const fundingSources = await prisma.funding_source.findMany()
 
+	const categories = await prisma.category.findMany()
 
 	const tableData = assets?.map((asset) => {
 		return ({
 			asset_number: asset.asset_number,
 			id: asset.id,
 			serial_number: asset.serial_number,
+			category: asset?.category?.name,
+			category_id: asset?.category?.id,
 			model: asset.model.name,
 			model_id: asset.model.id,
 			manufacturer: asset.model.manufacturer.name,
@@ -109,7 +118,6 @@ export default async function Page() {
 		{
 			Header: 'Model',
 			accessor: 'model',
-			Filter: ''
 		},
 		{
 			Header: 'Model id',
@@ -119,11 +127,19 @@ export default async function Page() {
 		{
 			Header: 'Manufacturer',
 			accessor: 'manufacturer',
-			Filter: ''
 		},
 		{
 			Header: 'Serial #',
 			accessor: 'serial_number'
+		},
+		{
+			Header: '',
+			accessor: 'category_id',
+			id: 'category_id'
+		},
+		{
+			Header: 'Category',
+			accessor: 'category'
 		},
 		{
 			Header: '',
@@ -134,12 +150,10 @@ export default async function Page() {
 			Header: 'Funding Source',
 			accessor: 'funding_source.name',
 			id: 'funding_source_name',
-			Filter: ''
 		},
 		{
 			Header: 'Purchase Date',
 			accessor: 'purchase_date',
-			Filter: ''
 		},
 	]
 
@@ -151,6 +165,7 @@ export default async function Page() {
 				"location_id",
 				"status_id",
 				"funding_source_id",
+				"category_id",
 			],
 			pageSize: 25
 		}
@@ -194,6 +209,18 @@ export default async function Page() {
 						name: fSource.name
 					}
 				}),
+			}
+		)
+		selectFields.push(
+			{
+				id: 'category_id',
+				type: ' category',
+				data: categories.map((category) => {
+					return {
+						id: category.id,
+						name: category.name
+					}
+				})
 			}
 		)
 	}

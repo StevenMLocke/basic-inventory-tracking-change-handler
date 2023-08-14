@@ -63,7 +63,6 @@ export default async function Page(req) {
 		{
 			Header: 'Role',
 			accessor: 'role_name',
-			Filter: '',
 		},
 		{
 			Header: "",
@@ -76,7 +75,6 @@ export default async function Page(req) {
 		tableColumns.push({
 			Header: 'Authorized?',
 			accessor: 'authorized_bitch_user',
-			Filter: '',
 		})
 	}
 

@@ -27,6 +27,11 @@ export default async function Page() {
 					name: true,
 				},
 			},
+			category: {
+				select: {
+					name: true
+				}
+			},
 			status: {
 				select: {
 					name: true,
