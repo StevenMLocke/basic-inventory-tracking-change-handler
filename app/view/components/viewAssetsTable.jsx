@@ -28,8 +28,6 @@ export function ViewAssetsTable({ dataData }) {
 			{
 				Header: "Asset",
 				accessor: "asset_number",
-				Filter: SelectColumnFilter,
-				filter: "equals",
 			},
 			{
 				Header: "Manu.",
