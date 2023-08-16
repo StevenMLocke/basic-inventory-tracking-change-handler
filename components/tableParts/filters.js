@@ -22,7 +22,7 @@ export function SelectColumnFilter({
 
 	return (
 		<select
-			className='select select-bordered select-sm w-[4rem] form-control my-2 '
+			className='select select-bordered select-sm max-w-[6rem] form-control my-2 '
 			value={filterValue}
 			onChange={(e) => {
 				setFilter(e.target.value || undefined);
@@ -49,12 +49,12 @@ export function TextColumnFilter({
 
 	return (
 		<input
-			className='input input-bordered input-sm max-w-[5rem] form-control my-2'
+			className='input input-bordered input-sm max-w-[6rem] form-control my-2'
 			value={filterValue || ""}
 			onChange={(e) => {
 				setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
 			}}
-			placeholder={`Search ${count} records...`}
+			placeholder={`Filter…`}
 		/>
 	);
 }

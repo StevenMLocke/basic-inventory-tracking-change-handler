@@ -141,6 +141,7 @@ export function CreateAssetClientWrapper({
 					<h2 className='prose-xl font-semibold'>Create New Asset</h2>
 					{formInputs(textFieldsArray, selectArray, false)}
 				</MgmtForm>
+				{/* <pre>{JSON.stringify(formFields, null, 2)}</pre> */}
 			</ContentWrapper>
 		</>
 	);

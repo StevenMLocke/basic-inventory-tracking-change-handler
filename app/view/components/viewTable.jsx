@@ -19,8 +19,7 @@ export function ViewTable({ dataData }) {
 			{
 				Header: "Date",
 				accessor: "date",
-				Filter: SelectColumnFilter,
-				filter: "includes",
+				Filter: TextColumnFilter,
 			},
 			{
 				Header: "Action",
@@ -31,8 +30,7 @@ export function ViewTable({ dataData }) {
 			{
 				Header: "Asset Number",
 				accessor: "asset.asset_number",
-				Filter: SelectColumnFilter,
-				filter: "equals",
+				Filter: TextColumnFilter,
 			},
 			{
 				Header: "Manufacturer",

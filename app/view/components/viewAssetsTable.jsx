@@ -44,8 +44,6 @@ export function ViewAssetsTable({ dataData }) {
 			{
 				Header: "Serial #",
 				accessor: "serial_number",
-				Filter: SelectColumnFilter,
-				filter: "equals",
 			},
 			{
 				Header: "Category",

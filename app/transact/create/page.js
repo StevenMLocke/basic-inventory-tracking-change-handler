@@ -22,7 +22,7 @@ export default async function Page() {
 	})
 
 	const fundingSources = await prisma.funding_source.findMany()
-
+	const categories = await prisma.category.findMany()
 
 	const ids = {
 		action: {
@@ -66,6 +66,16 @@ export default async function Page() {
 				return {
 					id: model.id,
 					name: `${model.manufacturer.name} - ${model.name}`
+				}
+			})
+		},
+		{
+			id: 'category_id',
+			type: 'category',
+			data: categories?.map((category) => {
+				return {
+					id: category.id,
+					name: category.name
 				}
 			})
 		},
