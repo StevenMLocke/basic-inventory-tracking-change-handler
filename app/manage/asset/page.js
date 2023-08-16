@@ -209,6 +209,7 @@ export default async function Page() {
 						name: fSource.name
 					}
 				}),
+				required: false
 			}
 		)
 		selectFields.push(
