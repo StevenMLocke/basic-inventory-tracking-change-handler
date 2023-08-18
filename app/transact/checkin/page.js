@@ -59,7 +59,7 @@ export default async function Page() {
 		},
 		location: {
 			id: locations.filter((location) => {
-				return location.name === "In stock";
+				return location.name === "In Process";
 			})[0].id
 		},
 		transactor: { id: session.user.id },
